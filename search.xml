@@ -4,6 +4,62 @@
   
     
     <entry>
+      <title>HUST仓库</title>
+      <link href="/posts/c723aac6.html"/>
+      <url>/posts/c723aac6.html</url>
+      
+        <content type="html"><![CDATA[<p>本博客用于记录作者本科时期的课程实验或课程设计。</p><ol><li><a href="https://github.com/EpsilonZYJ/DataStructureExp">数据结构实验</a></li><li><a href="https://github.com/EpsilonZYJ/Sudoku">基于SAT问题的数独求解（程序综合磕碜设计）</a></li><li><a href="https://github.com/EpsilonZYJ/AlgorithmExperiment">算法设计实验</a></li><li><a href="https://github.com/EpsilonZYJ/CppExperiement">C++实验</a></li><li><a href="https://github.com/EpsilonZYJ/IntroductionToAI">人工智能导论课程作业</a></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> HUST </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> HUST </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>GNN经典模型 | GNN Basic Models</title>
+      <link href="/posts/4a93988c.html"/>
+      <url>/posts/4a93988c.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> AI </category>
+          
+          <category> GNN </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> GNN </tag>
+            
+            <tag> GNN With Attention </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>图神经网络简介 | An Introduction to GNN</title>
       <link href="/posts/63fed347.html"/>
       <url>/posts/63fed347.html</url>
