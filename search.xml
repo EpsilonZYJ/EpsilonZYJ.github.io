@@ -160,9 +160,9 @@
     
     
     <entry>
-      <title>Who am I</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>分类 ｜ Categories</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -171,11 +171,11 @@
     
     
     <entry>
-      <title>分类 ｜ Categories</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title>Who am I</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="关于我-｜-About-me"><a href="#关于我-｜-About-me" class="headerlink" title="关于我 ｜ About me"></a>关于我 ｜ About me</h2><p>目前就读于华中科技大学计算机科学与技术学院，喜欢的方向很杂，做做机器学习，偶尔也做做系统。</p><p>I am currently an undergraduate student in Huazhong University of Science and Technology, majoring in computer science and technology. I am interested in various fields, including machine learning and computer system, especially in deep learning.</p><hr><h2 id="经历与技能-｜-Research-and-Experience"><a href="#经历与技能-｜-Research-and-Experience" class="headerlink" title="经历与技能 ｜ Research and Experience"></a>经历与技能 ｜ Research and Experience</h2><p>当下研究方向为图神经网络，同时也做AI4Science，并应用图神经网络。空余时间会进行基于Swift的iOS应用开发。现在掌握了C++，Java，python，Swift等语言。</p><p>I am now studying about Graph Neural Network, in detail GNN with Transformer. Besides, I also try AI for Science, where GNN can be widely applied.</p><p>In my spare time, I work on iOS App development with Swift. I have learned C++, Java, python, Swift.</p>]]></content>
       
     </entry>
     
