@@ -20,42 +20,6 @@
   </url>
   
   <url>
-    <loc>http://epsilonzyj.github.io/posts/ebcd0e10.html</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://epsilonzyj.github.io/posts/4a93988c.html</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://epsilonzyj.github.io/posts/63fed347.html</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://epsilonzyj.github.io/posts/c723aac6.html</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://epsilonzyj.github.io/posts/4a17b156.html</loc>
     
     <lastmod>2025-03-12</lastmod>
@@ -93,6 +57,42 @@
   
   <url>
     <loc>http://epsilonzyj.github.io/categories/index.html</loc>
+    
+    <lastmod>2025-03-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/posts/ebcd0e10.html</loc>
+    
+    <lastmod>2025-03-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/posts/4a93988c.html</loc>
+    
+    <lastmod>2025-03-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/posts/63fed347.html</loc>
+    
+    <lastmod>2025-03-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/posts/c723aac6.html</loc>
     
     <lastmod>2025-03-12</lastmod>
     
@@ -154,14 +154,14 @@
   </url>
   
   <url>
-    <loc>http://epsilonzyj.github.io/categories/HUST/</loc>
+    <loc>http://epsilonzyj.github.io/categories/AI/GNN/</loc>
     <lastmod>2025-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://epsilonzyj.github.io/categories/AI/GNN/</loc>
+    <loc>http://epsilonzyj.github.io/categories/HUST/</loc>
     <lastmod>2025-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
