@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>ICS随笔</title>
+      <link href="/posts/67ad26dd.html"/>
+      <url>/posts/67ad26dd.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="关于右移的问题"><a href="#关于右移的问题" class="headerlink" title="关于右移的问题"></a>关于右移的问题</h2><h3 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h3><p>在上机进行ICS实验中，有一个函数要求产生highbit到lowbit全为1的数字。一个相当简单的想法是直接将0xFFFFFFFF右移hinghbit+1位后再 移回来，再取反，便可以得到第0位到第highbit位的数字，然后再进行后续操作。</p><p>然而在这个问题中，遇到了一些问题，在此记录一下。</p><h4 id="左右移的位数为负数"><a href="#左右移的位数为负数" class="headerlink" title="左右移的位数为负数"></a>左右移的位数为负数</h4><p><strong>负数移位</strong>（如x &gt;&gt; -1）属于<strong>未定义行为</strong>，不同平台和编译器会产生不同结果，部分会在编译阶段报错，而在一些特定运算下，如x &gt;&gt; (m-n)中，可能会因为某些特殊赋值而出现负数，应当进行避免。</p><h4 id="右移溢出"><a href="#右移溢出" class="headerlink" title="右移溢出"></a>右移溢出</h4><p>根据上面函数所需要求，一开始写出如下的函数：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">bitMask</span><span class="params">(<span class="type">int</span> highbit, <span class="type">int</span> lowbit)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> high = ~((<span class="number">0xFFFFFFFF</span> &gt;&gt; (highbit + <span class="number">1</span>)) &lt;&lt; (highbit + <span class="number">1</span>));</span><br><span class="line">    <span class="type">int</span> low  = ((~<span class="number">0</span>) &lt;&lt; lowbit);</span><br><span class="line">    <span class="keyword">return</span> high &amp; low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>然而，在测试调试时发现，当highbit==31时，函数值则会有问题。溯源后发现，highbit+1==32时，high的值一直为0xFFFFFFFF，并不符合预期的0x0。起初以为是自己逻辑有问题，于是进行了一下测试，首先把highbit+1替换为32：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">bitMask</span><span class="params">(<span class="type">int</span> highbit, <span class="type">int</span> lowbit)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> high = ~((<span class="number">0xFFFFFFFF</span> &gt;&gt; <span class="number">32</span>) &lt;&lt; <span class="number">32</span>);</span><br><span class="line">    <span class="type">int</span> low  = ((~<span class="number">0</span>) &lt;&lt; lowbit);</span><br><span class="line">    <span class="keyword">return</span> high &amp; low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>然而出乎意料的是，此时high的值变为正常的0x0，此时也开始报了warning，但显然不看warning是一个好习惯（经典笑话，笑）。则考虑到32与highbit+1的差异性，一开始没考虑常量和变量的问题，以为是32是unsigned类型而另一个是int类型，由于数据类型的问题可能会存在一些区别，虽然感觉这种思路似乎很离谱，且并没有什么道理可言，但是还是测试了一下</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">bitMask</span><span class="params">(<span class="type">int</span> highbit, <span class="type">int</span> lowbit)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> high = ~((<span class="number">0xFFFFFFFF</span> &gt;&gt; (<span class="type">unsigned</span>)(highbit + <span class="number">1</span>)) &lt;&lt; (<span class="type">unsigned</span>)(highbit + <span class="number">1</span>));</span><br><span class="line">    <span class="type">int</span> low  = ((~<span class="number">0</span>) &lt;&lt; lowbit);</span><br><span class="line">    <span class="keyword">return</span> high &amp; low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这个时候high又变成了0xFFFFFFFF，这有些出乎意料，一时就没什么头绪，不知道有什么问题，于是就开始怀疑编译器是否有编译优化的问题了。</p><h5 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h5><p>经过查找资料，发现右移时右侧操作数大于或等于左侧操作数的位数是属于未定义运算，而编译时确实存在一些编译优化。对于未定义行为，在编译时，分别发生了以下两件事：</p><ul><li>常量表达式：编译器在编译阶段进行常量求值，依据标准未定义的情况下可能直接优化成 0。</li><li>变量表达式：运行时生成的移位指令通常只取移位数的低 5 位（对于 32 位整数而言），因而 32 的低 5 位为 0，实际移位相当于“右移 0 位”，结果保持原值 0xFFFFFFFF。</li></ul><p>当表达式写为 0xFFFFFFFF &gt;&gt; (highbit+1) 时，虽然 (highbit+1) 计算结果为 32，但由于其为运行时求值的变量表达式，编译器生成的汇编指令遵循硬件实际移位机制。</p><p>在许多 CPU 架构（例如 x86）中，用于右移操作的指令（如 SHR 指令）通常只取移位数的低 5 位（对于 32 位操作数），即实际移位数 = 给定移位数 mod 32。</p><p>当 (highbit+1) 等于 32 时，其低 5 位为 0，故实际移位操作相当于“右移 0 位”，因此结果仍为原值 0xFFFFFFFF。</p><p>这种处理方式与硬件实现有关，虽然在 C 语言标准中两种写法的行为都是未定义的，但实际运行时硬件指令的“模 32”特性使得结果不同。</p><p>因此，对于上述问题，一种解决办法就是分开写，即移两次位。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">bitMask</span><span class="params">(<span class="type">int</span> highbit, <span class="type">int</span> lowbit)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> high = ~((((<span class="number">0xFFFFFFFF</span> &gt;&gt; highbit) &gt;&gt; <span class="number">1</span>) &lt;&lt; highbit) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">    <span class="type">int</span> low  = ((~<span class="number">0</span>) &lt;&lt; lowbit);</span><br><span class="line">    <span class="keyword">return</span> high &amp; low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Course </category>
+          
+          <category> ICS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ICS </tag>
+            
+            <tag> C/C++ </tag>
+            
+            <tag> Assembly </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HUST仓库</title>
       <link href="/posts/c723aac6.html"/>
       <url>/posts/c723aac6.html</url>

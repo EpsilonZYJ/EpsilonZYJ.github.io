@@ -56,6 +56,15 @@
   </url>
   
   <url>
+    <loc>http://epsilonzyj.github.io/posts/67ad26dd.html</loc>
+    
+    <lastmod>2025-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://epsilonzyj.github.io/posts/4a17b156.html</loc>
     
     <lastmod>2025-03-14</lastmod>
@@ -138,6 +147,27 @@
   </url>
   
   <url>
+    <loc>http://epsilonzyj.github.io/tags/ICS/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/tags/C-C/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/tags/Assembly/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://epsilonzyj.github.io/tags/Java/</loc>
     <lastmod>2025-03-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -161,13 +191,6 @@
   </url>
   
   <url>
-    <loc>http://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2025-03-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://epsilonzyj.github.io/categories/AI/GNN/</loc>
     <lastmod>2025-03-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -175,7 +198,28 @@
   </url>
   
   <url>
+    <loc>http://epsilonzyj.github.io/categories/Course/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://epsilonzyj.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2025-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://epsilonzyj.github.io/categories/Course/ICS/</loc>
     <lastmod>2025-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
