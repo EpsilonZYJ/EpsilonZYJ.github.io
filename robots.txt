@@ -3,7 +3,8 @@ User-agent: *
 Allow: /
 Allow: /archives/
 Allow: /categories/
-Allow: /tags/ 
+Allow: /tags/
+Allow: /sitemap.xml
 
 Disallow: /vendors/
 Disallow: /js/
