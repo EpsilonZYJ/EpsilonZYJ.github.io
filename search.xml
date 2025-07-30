@@ -31,6 +31,33 @@
     
     
     <entry>
+      <title>使用Mac远程连接Windows WSL</title>
+      <link href="/posts/e4aef2ca.html"/>
+      <url>/posts/e4aef2ca.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Windows与MacBook，且处于同一局域网下。安装WSL2的过程略。</p><h2 id="WSL中的配置"><a href="#WSL中的配置" class="headerlink" title="WSL中的配置"></a>WSL中的配置</h2><h3 id="安装配置SSH服务"><a href="#安装配置SSH服务" class="headerlink" title="安装配置SSH服务"></a>安装配置SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install openssh-server</span><br></pre></td></tr></table></figure><h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure><p>将注释的内容全部取消注释：</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Port 22</span><br><span class="line">AddressFamily any</span><br><span class="line">ListenAddress 0.0.0.0</span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure><h3 id="启动SSH服务"><a href="#启动SSH服务" class="headerlink" title="启动SSH服务"></a>启动SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ssh-keygen -A</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> /usr/sbin/service ssh start</span><br></pre></td></tr></table></figure><h2 id="Windows的配置"><a href="#Windows的配置" class="headerlink" title="Windows的配置"></a>Windows的配置</h2><p>由于电脑可能安装了杀毒软件，会导致Windows Defender中防火墙设置被篡改而使得部分功能变为灰色，从而不可用，因此使用Power Shell进行配置。注意，一定要使用管理员身份打开，否则会因为权限不足而无法完成操作。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-NetFirewallRule -Name sshd -DisplayName <span class="string">&#x27;sshd for WSL&#x27;</span> -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22</span><br></pre></td></tr></table></figure><h2 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h2><p>使用管理员身份在Power Shell中运行如下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">​​​​​​​netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=[PORT] connectaddress=[IP] connectport=[PORT]</span><br><span class="line"><span class="comment"># PORT 为你设置的端口，我这里为3333</span></span><br><span class="line"><span class="comment"># IP地址为wls linux子系统的ip地址，可通过ifconfig查看</span></span><br></pre></td></tr></table></figure><h2 id="使用Mac远程连接"><a href="#使用Mac远程连接" class="headerlink" title="使用Mac远程连接"></a>使用Mac远程连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh xxx@xxx.xxx.xxx.xxx -p 22</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Env </category>
+          
+          <category> WSL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> WSL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CS224W | Machine Learning with Graphs</title>
       <link href="/posts/c6b8d3b6.html"/>
       <url>/posts/c6b8d3b6.html</url>
@@ -274,17 +301,6 @@
     
     
     <entry>
-      <title>简 介 ｜ Who am I</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="关于我-｜-About-me"><a href="#关于我-｜-About-me" class="headerlink" title="关于我 ｜ About me"></a>关于我 ｜ About me</h2><p>目前就读于华中科技大学计算机科学与技术学院，喜欢的方向很杂，做做机器学习，偶尔也做做系统。</p><p>I am currently an undergraduate student in Huazhong University of Science and Technology, majoring in computer science and technology. I am interested in various fields, including machine learning and computer system, especially in deep learning.</p><hr><h2 id="兴趣领域-｜-Interests"><a href="#兴趣领域-｜-Interests" class="headerlink" title="兴趣领域 ｜ Interests"></a>兴趣领域 ｜ Interests</h2><p>当下研究方向为图神经网络，同时也做AI4Science，并应用图神经网络。空余时间会进行基于Swift的iOS应用开发。</p><p>I am now studying about Graph Neural Network, in detail GNN with Transformer. Besides, I also try AI for Science, where GNN can be widely applied.</p><hr><h2 id="项目-｜-Projects"><a href="#项目-｜-Projects" class="headerlink" title="项目 ｜ Projects"></a>项目 ｜ Projects</h2><ul><li><p>AI辅助新材料的发现(GNN, ReactJS, AI4Science)</p><ul><li>使用<strong>图神经网络</strong>开发了一个模型，用于辅助新材料的发现</li><li>采用<strong>ReactJS</strong>框架搭建前端，用于输入和可视化等</li><li>创建<strong>分布式相似性检索系统</strong>，用于搜索相似的材料分子</li></ul></li><li><p>AI-Assisted New Material Discovery(GNN, ReactJS, AI4Science)</p><ul><li>Develop a model to assist in the discovery of new materials by applying <strong>Graph Neural Network</strong>.</li><li>Develop a web application for the front development, namely, the inputs and visualization of the model with <strong>ReactJS</strong>.</li><li>Create <strong>a distributed similarity search system</strong> of searching for material molecules.</li></ul></li></ul><hr><h2 id="技能-｜-Skills"><a href="#技能-｜-Skills" class="headerlink" title="技能 ｜ Skills"></a>技能 ｜ Skills</h2><ul><li>编程语言：C/C++, Java, SQL, python, Swift, JavaScript</li><li><p>技能标签：深度学习, 机器学习, iOS开发, ReactJS</p></li><li><p>Programming language: C/C++, Java, SQL, python, Swift, JavaScript</p></li><li>Skill tags: Deep Learning, Machine Learning, iOS App Development, ReactJS</li></ul>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>分类 ｜ Categories</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
@@ -312,6 +328,17 @@
       <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>简 介 ｜ Who am I</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="关于我-｜-About-me"><a href="#关于我-｜-About-me" class="headerlink" title="关于我 ｜ About me"></a>关于我 ｜ About me</h2><p>目前就读于华中科技大学计算机科学与技术学院，喜欢的方向很杂，做做机器学习，偶尔也做做系统。</p><p>I am currently an undergraduate student in Huazhong University of Science and Technology, majoring in computer science and technology. I am interested in various fields, including machine learning and computer system, especially in deep learning.</p><hr><h2 id="兴趣领域-｜-Interests"><a href="#兴趣领域-｜-Interests" class="headerlink" title="兴趣领域 ｜ Interests"></a>兴趣领域 ｜ Interests</h2><p>当下研究方向为图神经网络，同时也做AI4Science，并应用图神经网络。空余时间会进行基于Swift的iOS应用开发。</p><p>I am now studying about Graph Neural Network, in detail GNN with Transformer. Besides, I also try AI for Science, where GNN can be widely applied.</p><hr><h2 id="项目-｜-Projects"><a href="#项目-｜-Projects" class="headerlink" title="项目 ｜ Projects"></a>项目 ｜ Projects</h2><ul><li><p>AI辅助新材料的发现(GNN, ReactJS, AI4Science)</p><ul><li>使用<strong>图神经网络</strong>开发了一个模型，用于辅助新材料的发现</li><li>采用<strong>ReactJS</strong>框架搭建前端，用于输入和可视化等</li><li>创建<strong>分布式相似性检索系统</strong>，用于搜索相似的材料分子</li></ul></li><li><p>AI-Assisted New Material Discovery(GNN, ReactJS, AI4Science)</p><ul><li>Develop a model to assist in the discovery of new materials by applying <strong>Graph Neural Network</strong>.</li><li>Develop a web application for the front development, namely, the inputs and visualization of the model with <strong>ReactJS</strong>.</li><li>Create <strong>a distributed similarity search system</strong> of searching for material molecules.</li></ul></li></ul><hr><h2 id="技能-｜-Skills"><a href="#技能-｜-Skills" class="headerlink" title="技能 ｜ Skills"></a>技能 ｜ Skills</h2><ul><li>编程语言：C/C++, Java, SQL, python, Swift, JavaScript</li><li><p>技能标签：深度学习, 机器学习, iOS开发, ReactJS</p></li><li><p>Programming language: C/C++, Java, SQL, python, Swift, JavaScript</p></li><li>Skill tags: Deep Learning, Machine Learning, iOS App Development, ReactJS</li></ul>]]></content>
       
     </entry>
     
