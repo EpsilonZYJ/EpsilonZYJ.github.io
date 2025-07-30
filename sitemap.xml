@@ -20,33 +20,6 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/posts/2286d822.html</loc>
-    
-    <lastmod>2025-07-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/posts/4a17b156.html</loc>
-    
-    <lastmod>2025-07-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/posts/e4aef2ca.html</loc>
-    
-    <lastmod>2025-07-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://epsilonzyj.github.io/google7e7b55ce6b603fc5.html</loc>
     
     <lastmod>2025-07-30</lastmod>
@@ -56,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/categories/index.html</loc>
+    <loc>https://epsilonzyj.github.io/about/index.html</loc>
     
     <lastmod>2025-07-30</lastmod>
     
@@ -65,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/about/index.html</loc>
+    <loc>https://epsilonzyj.github.io/categories/index.html</loc>
     
     <lastmod>2025-07-30</lastmod>
     
@@ -110,6 +83,15 @@
   </url>
   
   <url>
+    <loc>https://epsilonzyj.github.io/posts/c723aac6.html</loc>
+    
+    <lastmod>2025-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://epsilonzyj.github.io/posts/67ad26dd.html</loc>
     
     <lastmod>2025-07-30</lastmod>
@@ -119,7 +101,25 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/posts/c723aac6.html</loc>
+    <loc>https://epsilonzyj.github.io/posts/2286d822.html</loc>
+    
+    <lastmod>2025-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://epsilonzyj.github.io/posts/4a17b156.html</loc>
+    
+    <lastmod>2025-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://epsilonzyj.github.io/posts/e4aef2ca.html</loc>
     
     <lastmod>2025-07-30</lastmod>
     
@@ -253,13 +253,6 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/categories/Course/</loc>
-    <lastmod>2025-07-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://epsilonzyj.github.io/categories/HUST/</loc>
     <lastmod>2025-07-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -267,14 +260,7 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2025-07-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/categories/Env/</loc>
+    <loc>https://epsilonzyj.github.io/categories/Course/</loc>
     <lastmod>2025-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -295,14 +281,21 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/categories/Env/WSL/</loc>
+    <loc>https://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2025-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</loc>
+    <loc>https://epsilonzyj.github.io/categories/Env/</loc>
+    <lastmod>2025-07-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://epsilonzyj.github.io/categories/Env/WSL/</loc>
     <lastmod>2025-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
