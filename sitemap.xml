@@ -29,6 +29,24 @@
   </url>
   
   <url>
+    <loc>https://epsilonzyj.github.io/posts/c6b8d3b6.html</loc>
+    
+    <lastmod>2025-10-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://epsilonzyj.github.io/posts/ebcd0e10.html</loc>
+    
+    <lastmod>2025-10-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://epsilonzyj.github.io/posts/4a93988c.html</loc>
     
     <lastmod>2025-10-08</lastmod>
@@ -120,24 +138,6 @@
   
   <url>
     <loc>https://epsilonzyj.github.io/categories/index.html</loc>
-    
-    <lastmod>2025-10-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/posts/c6b8d3b6.html</loc>
-    
-    <lastmod>2025-10-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/posts/ebcd0e10.html</loc>
     
     <lastmod>2025-10-08</lastmod>
     
@@ -276,6 +276,13 @@
   </url>
   
   <url>
+    <loc>https://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://epsilonzyj.github.io/categories/AI/Graph-ML/GNN/</loc>
     <lastmod>2025-10-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -284,13 +291,6 @@
   
   <url>
     <loc>https://epsilonzyj.github.io/categories/Course/ICS/</loc>
-    <lastmod>2025-10-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/categories/%E6%9C%AC%E7%AB%99%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2025-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
