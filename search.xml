@@ -4,60 +4,6 @@
   
     
     <entry>
-      <title>Zotero：A great research assistant</title>
-      <link href="/posts/2286d822.html"/>
-      <url>/posts/2286d822.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Tools </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Research </tag>
-            
-            <tag> Tools </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>使用Mac远程连接Windows WSL</title>
-      <link href="/posts/e4aef2ca.html"/>
-      <url>/posts/e4aef2ca.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Windows与MacBook，且处于同一局域网下。安装WSL2的过程略。</p><h2 id="WSL中的配置"><a href="#WSL中的配置" class="headerlink" title="WSL中的配置"></a>WSL中的配置</h2><h3 id="安装配置SSH服务"><a href="#安装配置SSH服务" class="headerlink" title="安装配置SSH服务"></a>安装配置SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install openssh-server</span><br></pre></td></tr></table></figure><h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure><p>将注释的内容全部取消注释：</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Port 22</span><br><span class="line">AddressFamily any</span><br><span class="line">ListenAddress 0.0.0.0</span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure><h3 id="启动SSH服务"><a href="#启动SSH服务" class="headerlink" title="启动SSH服务"></a>启动SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ssh-keygen -A</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> /usr/sbin/service ssh start</span><br></pre></td></tr></table></figure><h2 id="Windows的配置"><a href="#Windows的配置" class="headerlink" title="Windows的配置"></a>Windows的配置</h2><p>由于电脑可能安装了杀毒软件，会导致Windows Defender中防火墙设置被篡改而使得部分功能变为灰色，从而不可用，因此使用Power Shell进行配置。注意，一定要使用管理员身份打开，否则会因为权限不足而无法完成操作。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-NetFirewallRule -Name sshd -DisplayName <span class="string">&#x27;sshd for WSL&#x27;</span> -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22</span><br></pre></td></tr></table></figure><h2 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h2><p>使用管理员身份在Power Shell中运行如下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">​​​​​​​netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=[PORT] connectaddress=[IP] connectport=[PORT]</span><br><span class="line"><span class="comment"># PORT 为你设置的端口，我这里为3333</span></span><br><span class="line"><span class="comment"># IP地址为wls linux子系统的ip地址，可通过ifconfig查看</span></span><br></pre></td></tr></table></figure><h2 id="使用Mac远程连接"><a href="#使用Mac远程连接" class="headerlink" title="使用Mac远程连接"></a>使用Mac远程连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh xxx@xxx.xxx.xxx.xxx -p 22</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> Env </category>
-          
-          <category> WSL </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> WSL </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>CS224W | Machine Learning with Graphs</title>
       <link href="/posts/c6b8d3b6.html"/>
       <url>/posts/c6b8d3b6.html</url>
@@ -112,6 +58,60 @@
             <tag> Graph ML </tag>
             
             <tag> GNN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用Mac远程连接Windows WSL</title>
+      <link href="/posts/e4aef2ca.html"/>
+      <url>/posts/e4aef2ca.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Windows与MacBook，且处于同一局域网下。安装WSL2的过程略。</p><h2 id="WSL中的配置"><a href="#WSL中的配置" class="headerlink" title="WSL中的配置"></a>WSL中的配置</h2><h3 id="安装配置SSH服务"><a href="#安装配置SSH服务" class="headerlink" title="安装配置SSH服务"></a>安装配置SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install openssh-server</span><br></pre></td></tr></table></figure><h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure><p>将注释的内容全部取消注释：</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Port 22</span><br><span class="line">AddressFamily any</span><br><span class="line">ListenAddress 0.0.0.0</span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure><h3 id="启动SSH服务"><a href="#启动SSH服务" class="headerlink" title="启动SSH服务"></a>启动SSH服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ssh-keygen -A</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> /usr/sbin/service ssh start</span><br></pre></td></tr></table></figure><h2 id="Windows的配置"><a href="#Windows的配置" class="headerlink" title="Windows的配置"></a>Windows的配置</h2><p>由于电脑可能安装了杀毒软件，会导致Windows Defender中防火墙设置被篡改而使得部分功能变为灰色，从而不可用，因此使用Power Shell进行配置。注意，一定要使用管理员身份打开，否则会因为权限不足而无法完成操作。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-NetFirewallRule -Name sshd -DisplayName <span class="string">&#x27;sshd for WSL&#x27;</span> -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22</span><br></pre></td></tr></table></figure><h2 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h2><p>使用管理员身份在Power Shell中运行如下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">​​​​​​​netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=[PORT] connectaddress=[IP] connectport=[PORT]</span><br><span class="line"><span class="comment"># PORT 为你设置的端口，我这里为3333</span></span><br><span class="line"><span class="comment"># IP地址为wls linux子系统的ip地址，可通过ifconfig查看</span></span><br></pre></td></tr></table></figure><h2 id="使用Mac远程连接"><a href="#使用Mac远程连接" class="headerlink" title="使用Mac远程连接"></a>使用Mac远程连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh xxx@xxx.xxx.xxx.xxx -p 22</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Env </category>
+          
+          <category> WSL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> WSL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Zotero：A great research assistant</title>
+      <link href="/posts/2286d822.html"/>
+      <url>/posts/2286d822.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Tools </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Research </tag>
+            
+            <tag> Tools </tag>
             
         </tags>
       
