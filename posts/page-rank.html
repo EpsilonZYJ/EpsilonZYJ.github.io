@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Page Rank算法 | EpsilonZ's Blog</title><meta name="author" content="EpsilonZ"><meta name="copyright" content="EpsilonZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Page Rank算法的简要介绍"><meta property="og:type" content="article"><meta property="og:title" content="Page Rank算法"><meta property="og:url" content="https://epsilonzyj.github.io/posts/page-rank.html"><meta property="og:site_name" content="EpsilonZ&#39;s Blog"><meta property="og:description" content="Page Rank算法的简要介绍"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://epsilonzyj.github.io/img/GNNCover.png"><meta property="article:published_time" content="2025-10-20T11:39:16.000Z"><meta property="article:modified_time" content="2025-10-20T11:51:24.023Z"><meta property="article:author" content="EpsilonZ"><meta property="article:tag" content="Graph ML"><meta property="article:tag" content="Graph"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://epsilonzyj.github.io/img/GNNCover.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Page Rank算法",
+  "url": "https://epsilonzyj.github.io/posts/page-rank.html",
+  "image": "https://epsilonzyj.github.io/img/GNNCover.png",
+  "datePublished": "2025-10-20T11:39:16.000Z",
+  "dateModified": "2025-10-20T11:51:24.023Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "EpsilonZ",
+      "url": "https://epsilonzyj.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/128.ico"><link rel="canonical" href="https://epsilonzyj.github.io/posts/page-rank.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="manifest" href="/manifest.json"><meta name="msapplication-TileColor" content="#3b70fc"><link rel="apple-touch-icon" sizes="180x180" href="/img/siteicon/128.png"><link rel="icon" type="image/png" sizes="32x32" href="/img/siteicon/32.png"><link rel="icon" type="image/png" sizes="16x16" href="/img/siteicon/16.png"><link rel="mask-icon" href="/img/siteicon/128.png" color="#5bbad5"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>(() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":3,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"Page Rank算法",isHighlightShrink:!1,isToc:!0,pageType:"post"}</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload='this.media="all"'><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload='this.media="screen"'><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="EpsilonZ's Blog" type="application/atom+xml"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image:url(/img/IMG_3821.jpg)"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/IMG_2179.JPG" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i> <span>关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image:url(/img/GNNCover.png)"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">EpsilonZ's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Page Rank算法</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i> <span>搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i> <span>关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Page Rank算法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-20T11:39:16.000Z" title="发表于 2025-10-20 19:39:16">2025-10-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-20T11:51:24.023Z" title="更新于 2025-10-20 19:51:24">2025-10-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Graph-ML/">Graph ML</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Graph-ML/Graph/">Graph</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>最近笔者在读有关Graph Transformer中有关tokenize的相关论文时，读到一篇采用page rank做的相关工作。虽然这个算法很有名而且也并不是很复杂，但笔者在此之前并没有了解过，只是知道有这么一个东西。好在现在有强大的LLM，可以很快速的向我进行详细解释算法的具体内容，于是便有了这篇Blog进行存档。</p><h2 id="1-算法简介"><a href="#1-算法简介" class="headerlink" title="1. 算法简介"></a>1. 算法简介</h2><p><strong>PageRank</strong>是由Google的创始人Larry Page和Sergey Brin于1996年在斯坦福大学开发的一种链接分析算法，用于衡量网页的相对重要性。PageRank算法通过分析网页之间的链接关系来确定网页的权威性和重要性值。</p><h3 id="算法基本思想"><a href="#算法基本思想" class="headerlink" title="算法基本思想"></a>算法基本思想</h3><p>PageRank的核心思想基于一个简单的假设：<strong>一个网页的重要性可以通过指向它的链接数量和质量来衡量</strong>。就像学术引用中，被大量高质量论文引用的研究论文通常更为重要一样，被许多重要网页链接的网页也应该更加重要。</p><h2 id="2-数学公式与推导"><a href="#2-数学公式与推导" class="headerlink" title="2. 数学公式与推导"></a>2. 数学公式与推导</h2><h3 id="2-1-基本数学公式"><a href="#2-1-基本数学公式" class="headerlink" title="2.1 基本数学公式"></a>2.1 基本数学公式</h3><p>PageRank的基本数学公式如下：</p><script type="math/tex;mode=display">PR(A) = (1-d) + d * (\frac{PR(T1)}{C(T1)} + \frac{PR(T2)}{C(T2)} + ... + \frac{PR(Tn)}{C(Tn)})</script><p>其中：</p><ul><li><code>PR(A)</code>：页面A的PageRank值</li><li><code>d</code>：阻尼系数（damping factor），通常设置为0.85</li><li><code>T1...Tn</code>：所有指向页面A的页面</li><li><code>C(Ti)</code>：页面Ti的出链数量</li><li><code>1-d</code>：随机跳转概率</li></ul><h3 id="2-2-完整PageRank公式"><a href="#2-2-完整PageRank公式" class="headerlink" title="2.2 完整PageRank公式"></a>2.2 完整PageRank公式</h3><p>考虑随机游走模型，完整的PageRank公式可以表示为：</p><script type="math/tex;mode=display">PR(pᵢ) = \frac{(1-d)}{N} + d * ∑\frac{PR(pⱼ)}{L(pⱼ)}</script><p>其中：</p><ul><li><code>N</code>：网页总数</li><li><code>PR(pⱼ)</code>：页面pⱼ的PageRank值</li><li><code>L(pⱼ)</code>：页面pⱼ的出链数量</li><li><code>∑</code>：对所有链接到页面pᵢ的页面求和</li></ul><h3 id="2-3-矩阵表示"><a href="#2-3-矩阵表示" class="headerlink" title="2.3 矩阵表示"></a>2.3 矩阵表示</h3><p>PageRank可以用线性代数的形式表示：</p><script type="math/tex;mode=display">R = d * M * R + (1-d) * \frac{v}{N}</script><p>其中：</p><ul><li><code>R</code>：PageRank向量</li><li><code>M</code>：转移矩阵（adjacency matrix）</li><li><code>v</code>：单位向量</li><li><code>d</code>：阻尼系数</li><li><code>N</code>：页面总数</li></ul><h2 id="3-随机游走（Random-Walk）的作用"><a href="#3-随机游走（Random-Walk）的作用" class="headerlink" title="3. 随机游走（Random Walk）的作用"></a>3. 随机游走（Random Walk）的作用</h2><h3 id="3-1-随机游走模型"><a href="#3-1-随机游走模型" class="headerlink" title="3.1 随机游走模型"></a>3.1 随机游走模型</h3><p>PageRank算法基于<strong>随机游走模型</strong>（Random Walk），该模型可以这样理解：<br>想象一个随机上网者，他按照以下规则上网：</p><ol><li>85%的时间，他点击当前页面的链接继续浏览</li><li>15%的时间，他随机跳转到其他页面</li></ol><h3 id="3-2-随机游走的数学原理"><a href="#3-2-随机游走的数学原理" class="headerlink" title="3.2 随机游走的数学原理"></a>3.2 随机游走的数学原理</h3><p>在随机游走框架下，PageRank值代表：</p><ul><li><strong>长期访问概率</strong>：一个随机访问者在经过足够长时间的访问后，停留在某个页面的概率</li><li><strong>马尔可夫链稳态分布</strong>：PageRank是马尔可夫链的稳态分布</li></ul><h4 id="数学推导过程"><a href="#数学推导过程" class="headerlink" title="数学推导过程"></a>数学推导过程</h4><ol><li><p><strong>定义转移概率</strong>：</p><ul><li>从页面i到页面j的转移概率为 <code>P(i→j) = 1/L(i)</code>（如果存在链接）</li><li>随机跳转概率为 <code>(1-d)/N</code></li></ul></li><li><p><strong>转移矩阵构造</strong>：</p><script type="math/tex;mode=display">M = d * A + (1-d) * B</script><p>其中：</p><ul><li><code>A</code>：原始转移矩阵</li><li><code>B</code>：随机跳转矩阵</li><li><code>d</code>：阻尼系数</li></ul></li><li><p><strong>求解稳态分布</strong>：<br>通过求解 <code>R = M * R</code> 得到PageRank向量</p></li></ol><h3 id="3-3-随机游走的重要性"><a href="#3-3-随机游走的重要性" class="headerlink" title="3.3 随机游走的重要性"></a>3.3 随机游走的重要性</h3><p>随机游走模型解决了以下问题：</p><ol><li><strong>避免死循环</strong>：通过随机跳转防止算法陷入无限循环</li><li><strong>处理无出链页面</strong>：确保每个页面都能被访问到</li><li><strong>保证收敛性</strong>：利用马尔可夫链的收敛性定理确保算法稳定</li></ol><h2 id="4-算法的实际应用步骤"><a href="#4-算法的实际应用步骤" class="headerlink" title="4. 算法的实际应用步骤"></a>4. 算法的实际应用步骤</h2><h3 id="4-1-迭代计算方法"><a href="#4-1-迭代计算方法" class="headerlink" title="4.1 迭代计算方法"></a>4.1 迭代计算方法</h3><p>PageRank通常通过迭代计算来求解：</p><ol><li><strong>初始化</strong>：所有页面的PageRank值设为1/N</li><li><strong>迭代更新</strong>：<script type="math/tex;mode=display">PR_{new}(A) = \frac{(1-d)}{N} + d * ∑\frac{PR_old(T)}{L(T)}</script></li><li><strong>收敛判断</strong>：当相邻两次迭代的变化小于设定阈值时停止</li></ol><h3 id="4-2-Python实现示例"><a href="#4-2-Python实现示例" class="headerlink" title="4.2 Python实现示例"></a>4.2 Python实现示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pagerank</span>(<span class="params">M, d=<span class="number">0.85</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;PageRank算法实现&quot;&quot;&quot;</span></span><br><span class="line">    N = M.shape[<span class="number">1</span>]</span><br><span class="line">    w = np.ones(N) / N  <span class="comment"># 初始概率分布</span></span><br><span class="line">    M_hat = d * M + (<span class="number">1</span>-d) / N  <span class="comment"># Google矩阵</span></span><br><span class="line">    v = M_hat @ w + (<span class="number">1</span>-d)/N</span><br><span class="line">  </span><br><span class="line">    <span class="comment"># 迭代直到收敛</span></span><br><span class="line">    <span class="keyword">while</span> np.linalg.norm(w - v) &gt;= <span class="number">1e-10</span>:</span><br><span class="line">        w = v</span><br><span class="line">        v = M_hat @ w + (<span class="number">1</span>-d)/N</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> v</span><br></pre></td></tr></table></figure><h2 id="5-算法特性与优势"><a href="#5-算法特性与优势" class="headerlink" title="5. 算法特性与优势"></a>5. 算法特性与优势</h2><h3 id="5-1-主要特性"><a href="#5-1-主要特性" class="headerlink" title="5.1 主要特性"></a>5.1 主要特性</h3><ol><li><strong>自引用处理</strong>：页面不引用自己的链接</li><li><strong>等值分配</strong>：一个页面的PageRank平均分配给所有出链</li><li><strong>阻尼效应</strong>：阻尼系数决定了链接传递的效率</li></ol><h3 id="5-2-算法优势"><a href="#5-2-算法优势" class="headerlink" title="5.2 算法优势"></a>5.2 算法优势</h3><ol><li><strong>权威性评估</strong>：能识别真正权威的网页</li><li><strong>可扩展性</strong>：可处理大规模网络结构</li><li><strong>数学严谨性</strong>：基于坚实的数学理论基础</li></ol><h2 id="6-实际应用与扩展"><a href="#6-实际应用与扩展" class="headerlink" title="6. 实际应用与扩展"></a>6. 实际应用与扩展</h2><h3 id="6-1-在搜索引擎中的应用"><a href="#6-1-在搜索引擎中的应用" class="headerlink" title="6.1 在搜索引擎中的应用"></a>6.1 在搜索引擎中的应用</h3><ul><li><strong>Google搜索</strong>：PageRank是Google早期最重要的排名算法之一</li><li><strong>结果排序</strong>：结合其他因素进行综合排名</li></ul><h3 id="6-2-扩展应用"><a href="#6-2-扩展应用" class="headerlink" title="6.2 扩展应用"></a>6.2 扩展应用</h3><ol><li><strong>社交网络分析</strong>：评估用户影响力</li><li><strong>学术引用分析</strong>：论文重要性评估</li><li><strong>推荐系统</strong>：基于图结构的推荐</li><li><strong>生物信息学</strong>：蛋白质网络分析</li></ol><h3 id="6-3-现代搜索引擎的演变"><a href="#6-3-现代搜索引擎的演变" class="headerlink" title="6.3 现代搜索引擎的演变"></a>6.3 现代搜索引擎的演变</h3><p>虽然PageRank是Google早期的核心算法，但现在的搜索引擎已经结合了数百种因素，包括：</p><ul><li>内容相关性</li><li>用户行为数据</li><li>语义理解</li><li>个性化搜索</li></ul><h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>PageRank算法的伟大之处在于：</p><ol><li><strong>简洁而深刻</strong>：用简单的数学概念解决了复杂的问题</li><li><strong>理论基础扎实</strong>：基于图论和马尔可夫链的严格数学推导</li><li><strong>实际效果显著</strong>：极大地改善了搜索引擎的搜索质量</li><li><strong>影响深远</strong>：开创了链接分析的新领域</li></ol><p>PageRank不仅是一个算法，更是一种思考网络结构重要性的全新视角，其影响力已经远远超出了搜索引擎的范畴，成为现代网络分析的重要基础。</p><hr><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol><li>Wikipedia: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/PageRank">PageRank</a></li><li>Cornell大学讲座: <a target="_blank" rel="noopener" href="https://pi.math.cornell.edu/~mec/Winter2009/RalucaRemus/Lecture3/lecture3.html">The Mathematics of Google Search</a></li><li>Medium: <a target="_blank" rel="noopener" href="https://medium.com/biased-algorithms/pagerank-algorithm-explained-5f5c6a8c6696">PageRank Algorithm Explained</a></li><li>MIT课程资料: <a target="_blank" rel="noopener" href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/mit6_042js15_session35.pdf">Random Walks &amp; PageRank</a></li></ol></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者:</span> <span class="post-copyright-info"><a href="https://epsilonzyj.github.io">EpsilonZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接:</span> <span class="post-copyright-info"><a href="https://epsilonzyj.github.io/posts/page-rank.html">https://epsilonzyj.github.io/posts/page-rank.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明:</span> <span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://epsilonzyj.github.io" target="_blank">EpsilonZ's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Graph-ML/">Graph ML</a><a class="post-meta__tags" href="/tags/Graph/">Graph</a></div><div class="post-share"><div class="social-share" data-image="/img/GNNCover.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/NAGphormer.html" title="NAGphormer 论文阅读"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">NAGphormer 论文阅读</div></div><div class="info-2"><div class="info-item-1">NAGphormer:A Tokenized Graph Transformer For Node Classification In Large Graphs</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/641ba8fa.html" title="同质图与异质图 ｜ Homogeneous Graph &amp; Heterogeneous Graph"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-09</div><div class="info-item-2">同质图与异质图 ｜ Homogeneous Graph &amp; Heterogeneous Graph</div></div><div class="info-2"><div class="info-item-1">在Graph ML中关于图的类型的一些基础知识的补充</div></div></div></a><a class="pagination-related" href="/posts/761d64af.html" title="GNN中常见的问题 ｜ Problems With GNNs"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-10</div><div class="info-item-2">GNN中常见的问题 ｜ Problems With GNNs</div></div><div class="info-2"><div class="info-item-1">在GNN中的一些基础知识的补充</div></div></div></a><a class="pagination-related" href="/posts/2dd1331a.html" title="异质图数据集加载 ｜ Heterogeneous Graph Features"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-11</div><div class="info-item-2">异质图数据集加载 ｜ Heterogeneous Graph Features</div></div><div class="info-2"><div class="info-item-1">在Graph ML中的一些基础知识补充。</div></div></div></a><a class="pagination-related" href="/posts/c6b8d3b6.html" title="CS224W | Machine Learning with Graphs"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">CS224W | Machine Learning with Graphs</div></div><div class="info-2"><div class="info-item-1">本文基于Stanford的CS224W中一些理论内容，介绍有关图机器学习的手段与方法</div></div></div></a><a class="pagination-related no-desc" href="/posts/4a93988c.html" title="GNN经典模型 | GNN Basic Models"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-02</div><div class="info-item-2">GNN经典模型 | GNN Basic Models</div></div></div></a><a class="pagination-related" href="/posts/63fed347.html" title="图神经网络简介 | An Introduction to GNN"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">图神经网络简介 | An Introduction to GNN</div></div><div class="info-2"><div class="info-item-1">对图神经网络的简要介绍和入门</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/IMG_2179.JPG" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info-name">EpsilonZ</div><div class="author-info-description">To sleep, or to research, that is the question.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/EpsilonZYJ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/EpsilonZYJ" target="_blank" title="Github"><i class="fab fa-github" style="color:#24292e"></i></a><a class="social-icon" href="mailto:biopic.tweeter_2u@icloud.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color:#4a7dbe"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Research everyday!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 算法简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-number">1.1.</span> <span class="toc-text">算法基本思想</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E4%B8%8E%E6%8E%A8%E5%AF%BC"><span class="toc-number">2.</span> <span class="toc-text">2. 数学公式与推导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 基本数学公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%8C%E6%95%B4PageRank%E5%85%AC%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 完整PageRank公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 矩阵表示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%EF%BC%88Random-Walk%EF%BC%89%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3. 随机游走（Random Walk）的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 随机游走模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 随机游走的数学原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E6%8E%A8%E5%AF%BC%E8%BF%87%E7%A8%8B"><span class="toc-number">3.2.1.</span> <span class="toc-text">数学推导过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 随机游走的重要性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text">4. 算法的实际应用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%BF%AD%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 迭代计算方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Python%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 Python实现示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%AE%97%E6%B3%95%E7%89%B9%E6%80%A7%E4%B8%8E%E4%BC%98%E5%8A%BF"><span class="toc-number">5.</span> <span class="toc-text">5. 算法特性与优势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 主要特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E7%AE%97%E6%B3%95%E4%BC%98%E5%8A%BF"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 算法优势</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E4%B8%8E%E6%89%A9%E5%B1%95"><span class="toc-number">6.</span> <span class="toc-text">6. 实际应用与扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%9C%A8%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 在搜索引擎中的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E6%89%A9%E5%B1%95%E5%BA%94%E7%94%A8"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 扩展应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E7%8E%B0%E4%BB%A3%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E6%BC%94%E5%8F%98"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 现代搜索引擎的演变</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">7. 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/page-rank.html" title="Page Rank算法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Page Rank算法"></a><div class="content"><a class="title" href="/posts/page-rank.html" title="Page Rank算法">Page Rank算法</a><time datetime="2025-10-20T11:39:16.000Z" title="发表于 2025-10-20 19:39:16">2025-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/NAGphormer.html" title="NAGphormer 论文阅读"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="NAGphormer 论文阅读"></a><div class="content"><a class="title" href="/posts/NAGphormer.html" title="NAGphormer 论文阅读">NAGphormer 论文阅读</a><time datetime="2025-10-17T06:39:01.000Z" title="发表于 2025-10-17 14:39:01">2025-10-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/graph-transformer.html" title="Graph Transformer"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Graph Transformer"></a><div class="content"><a class="title" href="/posts/graph-transformer.html" title="Graph Transformer">Graph Transformer</a><time datetime="2025-10-11T17:09:33.000Z" title="发表于 2025-10-12 01:09:33">2025-10-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e110b7d9.html" title="进程守护screen"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/IMG_1525.PNG" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="进程守护screen"></a><div class="content"><a class="title" href="/posts/e110b7d9.html" title="进程守护screen">进程守护screen</a><time datetime="2025-10-11T09:12:22.000Z" title="发表于 2025-10-11 17:12:22">2025-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2dd1331a.html" title="异质图数据集加载 ｜ Heterogeneous Graph Features"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="异质图数据集加载 ｜ Heterogeneous Graph Features"></a><div class="content"><a class="title" href="/posts/2dd1331a.html" title="异质图数据集加载 ｜ Heterogeneous Graph Features">异质图数据集加载 ｜ Heterogeneous Graph Features</a><time datetime="2025-10-11T02:35:50.000Z" title="发表于 2025-10-11 10:35:50">2025-10-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image:url(/img/GNNCover.png)"><div id="footer-wrap"><div class="copyright">&copy;2025 By EpsilonZ</div><div class="framework-info"><span>框架</span> <a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题</span> <a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><div class="app-refresh" id="app-refresh" style="position:fixed;top:-2.2rem;left:0;right:0;z-index:99999;padding:0 1rem;font-size:15px;height:2.2rem;transition:all .3s ease"><div class="app-refresh-wrap" style="display:flex;color:#fff;height:100%;align-items:center;justify-content:center"><label>✨ 有新文章啦！ 👉</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color:#fff;text-decoration:underline;cursor:pointer">偷偷看一看 👀</span></a></div></div><script>if ('serviceWorker' in navigator) {
+if (navigator.serviceWorker.controller) {
+navigator.serviceWorker.addEventListener('controllerchange', function() {
+showNotification()
+})
+}
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+})
+}
+function showNotification() {
+if (GLOBAL_CONFIG.Snackbar) {
+var snackbarBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+GLOBAL_CONFIG.Snackbar.bgLight :
+GLOBAL_CONFIG.Snackbar.bgDark
+var snackbarPos = GLOBAL_CONFIG.Snackbar.position
+Snackbar.show({
+text: '✨ 有新文章啦！ 👉',
+backgroundColor: snackbarBg,
+duration: 500000,
+pos: snackbarPos,
+actionText: '🍗点击食用🍔',
+actionTextColor: '#fff',
+onActionClick: function(e) {
+location.reload()
+},
+})
+} else {
+var showBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+'#3b70fc' :
+'#1f1f1f'
+var cssText = `top: 0; background: ${showBg};`
+document.getElementById('app-refresh').style.cssText = cssText
+}
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i> <span>数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><script data-pjax>function butterfly_footer_beautify_injector_config(){var t=document.getElementById("footer-wrap");console.log("已挂载butterfly_footer_beautify"),t.insertAdjacentHTML("beforeend",'<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a></p>')}for(var elist="null".split(","),cpage=location.pathname,epage="all",flag=0,i=0;i<elist.length;i++)cpage.includes(elist[i])&&flag++;"all"===epage&&0==flag?butterfly_footer_beautify_injector_config():epage===cpage&&butterfly_footer_beautify_injector_config()</script><script async src="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.js"></script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async>for(var arr=document.getElementsByClassName("recent-post-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset","30"),arr[i].setAttribute("data-wow-iteration","1")</script><script async>for(var arr=document.getElementsByClassName("card-widget"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration",""),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("article-sort-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__slideInRight"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script></body></html>
