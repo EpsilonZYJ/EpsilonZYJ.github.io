@@ -19,6 +19,8 @@
           
           <category> Graph Transformer </category>
           
+          <category> Model Architecture </category>
+          
       </categories>
       
       
@@ -29,6 +31,8 @@
             <tag> Graph ML </tag>
             
             <tag> Graph Transformer </tag>
+            
+            <tag> Model Architecture </tag>
             
         </tags>
       
