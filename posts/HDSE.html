@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>论文阅读：HDSE | EpsilonZ's Blog</title><meta name="author" content="EpsilonZ"><meta name="copyright" content="EpsilonZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Enhancing Graph Transformers with Hierarchical Distance Structural Encoding"><meta property="og:type" content="article"><meta property="og:title" content="论文阅读：HDSE"><meta property="og:url" content="https://epsilonzyj.github.io/posts/HDSE.html"><meta property="og:site_name" content="EpsilonZ&#39;s Blog"><meta property="og:description" content="Enhancing Graph Transformers with Hierarchical Distance Structural Encoding"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://epsilonzyj.github.io/img/GNNCover.png"><meta property="article:published_time" content="2025-11-05T07:38:12.000Z"><meta property="article:modified_time" content="2025-11-05T07:52:35.832Z"><meta property="article:author" content="EpsilonZ"><meta property="article:tag" content="AI"><meta property="article:tag" content="Graph ML"><meta property="article:tag" content="Graph Transformer"><meta property="article:tag" content="Tokenizing"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://epsilonzyj.github.io/img/GNNCover.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "论文阅读：HDSE",
+  "url": "https://epsilonzyj.github.io/posts/HDSE.html",
+  "image": "https://epsilonzyj.github.io/img/GNNCover.png",
+  "datePublished": "2025-11-05T07:38:12.000Z",
+  "dateModified": "2025-11-05T07:52:35.832Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "EpsilonZ",
+      "url": "https://epsilonzyj.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/128.ico"><link rel="canonical" href="https://epsilonzyj.github.io/posts/HDSE.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="manifest" href="/manifest.json"><meta name="msapplication-TileColor" content="#3b70fc"><link rel="apple-touch-icon" sizes="180x180" href="/img/siteicon/128.png"><link rel="icon" type="image/png" sizes="32x32" href="/img/siteicon/32.png"><link rel="icon" type="image/png" sizes="16x16" href="/img/siteicon/16.png"><link rel="mask-icon" href="/img/siteicon/128.png" color="#5bbad5"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>(() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":3,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"论文阅读：HDSE",isHighlightShrink:!1,isToc:!0,pageType:"post"}</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload='this.media="all"'><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload='this.media="screen"'><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="EpsilonZ's Blog" type="application/atom+xml"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image:url(/img/IMG_3821.jpg)"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/IMG_2179.JPG" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i> <span>关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image:url(/img/GNNCover.png)"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">EpsilonZ's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">论文阅读：HDSE</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i> <span>搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i> <span>关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">论文阅读：HDSE</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T07:38:12.000Z" title="发表于 2025-11-05 15:38:12">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-05T07:52:35.832Z" title="更新于 2025-11-05 15:52:35">2025-11-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Graph-ML/">Graph ML</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Graph-ML/Graph-Transformer/">Graph Transformer</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Graph-ML/Graph-Transformer/Tokenizing/">Tokenizing</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><hr><h4 id="Metadata"><a href="#Metadata" class="headerlink" title="Metadata"></a>Metadata</h4><ul><li>作者: Yuankai Luo, Hongkang Li, Lei Shi, Xiao-Ming Wu</li><li>日期: 2024</li><li>出处: NeurIPS</li><li>PDF: <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2024/file/68a3919db3858f548dea769f2dbba611-Paper-Conference.pdf">https://proceedings.neurips.cc/paper_files/paper/2024/file/68a3919db3858f548dea769f2dbba611-Paper-Conference.pdf</a></li><li>开源代码: <a target="_blank" rel="noopener" href="https://github.com/LUOyk1999/HDSE">https://github.com/LUOyk1999/HDSE</a></li></ul><hr><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>图变换器需要强归纳偏置来推导有意义的注意力分数。然而，当前方法往往难以捕获更远的距离、层次结构或社区结构，而这些结构在各种图中都很常见，如分子图、社交网络和引用网络。本文提出了一种层次距离结构编码（Hierarchical Distance Structural Encoding, HDSE）方法，用于模拟图中的节点距离，重点关注其多级层次性质。我们引入了一个新框架，将HDSE无缝集成到现有图变换器的注意力机制中，允许与其他位置编码同时应用。为了将带有HDSE的图变换器应用于大规模图，我们进一步提出了一种高级HDSE，有效将线性变换器偏向图的层次结构。我们从理论上证明了HDSE在表达能力和泛化能力方面的优越性。实验上，我们证明了带有HDSE的图变换器在图分类、7个图级别数据集的回归任务以及11个大规模图的节点分类任务中表现出色。</p><h1 id="研究问题"><a href="#研究问题" class="headerlink" title="研究问题"></a>研究问题</h1><h1 id="研究问题概述"><a href="#研究问题概述" class="headerlink" title="研究问题概述"></a>研究问题概述</h1><p>Luo等(2024)指出，图变换器需要强大的归纳偏置(inductive biases)来获得有意义的注意力得分，但现有方法存在以下几个关键问题：</p><ol><li><strong>层次结构捕捉不足</strong>：当前方法往往难以捕捉图中的长距离、层次结构或社区结构，而这些结构在分子图、社交网络和引用网络等各类图中普遍存在。</li><li><strong>与MPNNs对比的局限性</strong>：与消息传递图神经网络(MPNNs)相比，图变换器虽然能避免MPNNs的过度平滑(oversmoothing)和过度压缩(over-squashing)问题，但缺乏强归纳偏置。</li><li><strong>位置编码挑战</strong>：发展有效的位置编码具有挑战性，因为图数据中的层次结构识别与其他欧几里得域有显著差异，导致图变换器容易过拟合，在数据有限时表现不如MPNNs。</li><li><strong>计算复杂度高</strong>：全局全对注意力机制的时间复杂度和空间复杂度随节点数量呈二次增长，限制了图变换器在具有数百万节点的图上的应用。</li><li><strong>社区结构处理困难</strong>：大规模图(如社交网络和引用网络)通常具有社区结构，这些结构具有紧密相连的组和明显的层次属性，但图变换器往往缺乏在各个层次上融入层次结构信息的能力。<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h1 id="层次距离结构编码-HDSE-方法详解"><a href="#层次距离结构编码-HDSE-方法详解" class="headerlink" title="层次距离结构编码(HDSE)方法详解"></a>层次距离结构编码(HDSE)方法详解</h1>Luokai等(2024)提出的层次距离结构编码(Hierarchical Distance Structural Encoding, HDSE)方法专门为增强图转换器在捕捉图中层次结构方面的能力而设计。以下是该方法的核心内容：<h2 id="1-图层次距离-GHD-定义"><a href="#1-图层次距离-GHD-定义" class="headerlink" title="1. 图层次距离(GHD)定义"></a>1. 图层次距离(GHD)定义</h2><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="./HDSE/HDSE.png" alt=""><br>首先，论文引入了图层次距离(Graph Hierarchy Distance, GHD)作为衡量图节点之间距离的新指标，特别关注其多级层次特性：<br><strong>定义1（图层次距离）</strong>：给定图G中的两个节点u, v和图层次<script type="math/tex">(G_i, \phi_i)_{i \geq 0}</script>，k级层次距离GHD定义为：<script type="math/tex;mode=display">GHD_0(u, v) = SPD(u, v) \quad (2)</script><script type="math/tex;mode=display">GHD_k(u, v) = SPD(\phi_{k-1} \circ \ldots \circ \phi_0(u), \phi_{k-1} \circ \ldots \circ \phi_0(v)) \quad (2)</script>其中<script type="math/tex">SPD(\cdot, \cdot)</script>表示两个节点之间的最短路径距离（若节点不连通则为∞），<script type="math/tex">\phi_{k-1} \circ \ldots \circ \phi_0(\cdot)</script>将<script type="math/tex">G_0</script>中的节点映射到<script type="math/tex">G_k</script>中的节点。<br>GHD满足距离度量的四个性质：零当且仅当节点相同、恒为正、对称性及三角不等式。如图1所示，<script type="math/tex">GHD_0</script><script type="math/tex">(v_1, v_{11}) = 7</script>，而<script type="math/tex">GHD_1(v_1, v_{11}) = 2</script>，表明在更高层次上节点间的距离关系被简化，这有助于捕捉图中的层次结构。<h2 id="2-层次距离结构编码-HDSE"><a href="#2-层次距离结构编码-HDSE" class="headerlink" title="2. 层次距离结构编码(HDSE)"></a>2. 层次距离结构编码(HDSE)</h2>基于GHD，论文提出层次距离结构编码(HDSE)，对于每对节点$i, j \in V$定义为：<script type="math/tex;mode=display">D_{i,j} = [GHD_0, GHD_1, \ldots, GHD_K]_{i,j} \in \mathbb{R}^{K+1} \quad (3)</script>其中$GHD_k$是k级层次距离矩阵，$K \in \mathbb{N}$控制考虑的最大层次级别。<br>HDSE相比传统的最短路径距离(SPD)具有更强的表达能力。通过GD-WL测试可以证明，HDSE能够区分更多不同结构的图。如图2所示，HDSE可以区分立方体图(Desargues)和十二面体图(Dodecahedron)，而仅使用SPD的GD-WL测试无法区分这两个图。<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="./HDSE/HDSE-example.png" alt=""><h2 id="3-HDSE在图转换器中的集成"><a href="#3-HDSE在图转换器中的集成" class="headerlink" title="3. HDSE在图转换器中的集成"></a>3. HDSE在图转换器中的集成</h2>为了将HDSE整合到现有图转换器的注意力机制中，论文提出了一种新颖框架：<br>首先，使用端到端可训练函数$\text{Bias}: \mathbb{R}^{K+1} \rightarrow \mathbb{R}$学习偏置的结构权重：<script type="math/tex;mode=display">H_{i,j} = \text{MLP}\{e^0_{\text{clip}^0_{i,j}}, \ldots, e^K_{\text{clip}^K_{i,j}}\}, \quad H_{i,j} \in \mathbb{R} \quad (4)</script>其中：<script type="math/tex;mode=display">\text{clip}^k_{i,j} = \min(L, GHD^k_{i,j}), \quad 0 \leq k \leq K</script>这里<script type="math/tex">[e_0^k, e_1^k, \ldots, e_L^k]_{0\le k \le K} \in \mathbb{R}^{d \times (L+1)}</script>收集了<script type="math/tex">L+1</script>个可学习的特征嵌入向量，分别对应<script type="math/tex">k</script>层次的不同距离。<br>然后将学习到的偏置权重集成到图转换器的自注意力机制中：<script type="math/tex;mode=display">\text{Attention}(X) = \text{softmax}\left(\frac{A + H}{\sqrt{d'}}\right)V, \quad A = QK^\top \quad (5)</script>这种集成方式与主干架构无关，可以无缝集成到现有图转换器的自注意力机制中。论文从理论上证明了HDSE在表达能力和泛化能力方面的优越性。<h2 id="4-大规模图的高级HDSE"><a href="#4-大规模图的高级HDSE" class="headerlink" title="4. 大规模图的高级HDSE"></a>4. 大规模图的高级HDSE</h2>对于大规模图（从百万到十亿节点），全局全对注意力机制的计算复杂性问题变得尤为突出。受Linformer的启发，论文提出了高级HDSE，将线性转换器偏向图的层次结构：<script type="math/tex;mode=display">D^c_{i,j} = \left[GHD^c\left(\prod_{l=0}^{c-1} P^l\right), \ldots, GHD^K\left(\prod_{l=0}^{c-1} P^l\right)\right]_{i,j}, \quad 1 \leq c \leq K \quad (7)</script>其中：</li></ol><ul><li>$GHD^m$ 表示 $m$ 级图层次距离矩阵（graph hierarchy distance）</li><li>$P^l$ 是投影矩阵，每行是独热向量，表示输入节点所属的 $l$ 级集群</li><li>$\prod_{l=0}^{c-1} P^l$ 是投影矩阵的连乘积</li><li>$D^c \in \mathbb{R}^{|V^0| \times |V^c| \times (K+1-c)}$，其中 $V^0$ 是原始图的节点集，$V^c$ 是第 $c$ 级粗化图的节点集<blockquote><p>$GHD^m\left(\prod_{l=0}^{c-1} P^l\right)$, $c \leq m \leq K$ 计算的是输入节点到c级图层次中的集群的距离</p></blockquote></li></ul><p>注意：</p><ul><li>在2.1节中，论文定义了投影矩阵$P̂^k ∈ {0,1}^{|V^k|×|V^{k+1}|}$，其中$P̂^k_{ij} = 1$当且仅当在k级图中的节点$v^k_i$属于k+1级图中的节点$v^{k+1}_j$所在的簇</li><li>归一化版本的投影矩阵定义为$P^k = P̂^k C_k^{-1/2}$，其中$C_k$是对角矩阵，其对角线元素表示簇的大小</li><li>每个投影矩阵$P^l$的行是一个one-hot向量，表示输入节点属于l级的哪个簇</li><li>投影矩阵的乘积$∏_{l=0}^{c-1} P^l$代表从原始图$G^0$到高阶粗粒度图$G^c$的直接映射关系<h2 id="5-理论基础"><a href="#5-理论基础" class="headerlink" title="5. 理论基础"></a>5. 理论基础</h2>论文从理论上证明了HDSE的优越性：<br><strong>命题1</strong>：使用HDSE的GD-WL测试比使用最短路径距离SPD的GD-WL测试具有更强的表达能力。论文首先证明了GD-WL使用HDSE至少能区分GD-WL使用SPD所能区分的所有图；然后通过十二面体图和立方体图的例子展示了HDSE的更强区分能力。<br><strong>命题2</strong>：具有HDSE的图转换器区分非同构图的能力至多等同于使用HDSE的GD-WL测试。在适当参数和足够多的头和层数下，具有HDSE的图转换器可以匹配使用HDSE的GD-WL测试的能力。<br><strong>推论1</strong>：存在一个使用HDSE的图转换器，比使用相同架构但使用SPD或不使用相对位置编码的图转换器更具表现力。<br><strong>命题3</strong>：对于半监督节点分类问题，当节点标签由”hierarchical core neighborhood”决定时，适当初始化的具有HDSE的单层图转换器能获得满意的泛化误差，而使用SPD或不使用相对位置编码无法保证这一点。<br>HDSE通过在图转换器中引入强归纳偏置，有效解决了transformer架构在图学习中缺乏层次结构信息的局限，在各种图任务中取得了优越的性能表现。</li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者:</span> <span class="post-copyright-info"><a href="https://epsilonzyj.github.io">EpsilonZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接:</span> <span class="post-copyright-info"><a href="https://epsilonzyj.github.io/posts/HDSE.html">https://epsilonzyj.github.io/posts/HDSE.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明:</span> <span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://epsilonzyj.github.io" target="_blank">EpsilonZ's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/Graph-ML/">Graph ML</a><a class="post-meta__tags" href="/tags/Graph-Transformer/">Graph Transformer</a><a class="post-meta__tags" href="/tags/Tokenizing/">Tokenizing</a></div><div class="post-share"><div class="social-share" data-image="/img/GNNCover.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/SPSE.html" title="论文阅读：Simple Path Structural Encoding"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">论文阅读：Simple Path Structural Encoding</div></div><div class="info-2"><div class="info-item-1">Simple Path Structural Encoding for Graph Transformers</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/NAGphormer.html" title="论文阅读：NAGphormer"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-17</div><div class="info-item-2">论文阅读：NAGphormer</div></div><div class="info-2"><div class="info-item-1">NAGphormer:A Tokenized Graph Transformer For Node Classification In Large Graphs</div></div></div></a><a class="pagination-related" href="/posts/NTFormer.html" title="论文阅读：NTFormer"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-21</div><div class="info-item-2">论文阅读：NTFormer</div></div><div class="info-2"><div class="info-item-1">NTFormer:A Composite Node Tokenized Graph Transformer for Node Classification</div></div></div></a><a class="pagination-related" href="/posts/SPSE.html" title="论文阅读：Simple Path Structural Encoding"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-27</div><div class="info-item-2">论文阅读：Simple Path Structural Encoding</div></div><div class="info-2"><div class="info-item-1">Simple Path Structural Encoding for Graph Transformers</div></div></div></a><a class="pagination-related" href="/posts/Vcr-Graphormer.html" title="论文阅读：Vcr-Graphormer"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-21</div><div class="info-item-2">论文阅读：Vcr-Graphormer</div></div><div class="info-2"><div class="info-item-1">Vcr-graphormer:A mini-batch graph transformer via virtual connections</div></div></div></a><a class="pagination-related" href="/posts/DUALFormer.html" title="论文阅读：DUALFormer"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-22</div><div class="info-item-2">论文阅读：DUALFormer</div></div><div class="info-2"><div class="info-item-1">DUALFormer:Dual Graph Transformer</div></div></div></a><a class="pagination-related" href="/posts/Primphormer.html" title="论文阅读：Primphormer"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-25</div><div class="info-item-2">论文阅读：Primphormer</div></div><div class="info-2"><div class="info-item-1">Primphormer:Efficient Graph Transformers with Primal Representations</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/IMG_2179.JPG" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info-name">EpsilonZ</div><div class="author-info-description">To sleep, or to research, that is the question.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/EpsilonZYJ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/EpsilonZYJ" target="_blank" title="Github"><i class="fab fa-github" style="color:#24292e"></i></a><a class="social-icon" href="mailto:biopic.tweeter_2u@icloud.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color:#4a7dbe"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Research everyday!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Metadata"><span class="toc-number">1.</span> <span class="toc-text">Metadata</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-number"></span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98"><span class="toc-number"></span> <span class="toc-text">研究问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98%E6%A6%82%E8%BF%B0"><span class="toc-number"></span> <span class="toc-text">研究问题概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number"></span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B1%82%E6%AC%A1%E8%B7%9D%E7%A6%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A0%81-HDSE-%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3"><span class="toc-number"></span> <span class="toc-text">层次距离结构编码(HDSE)方法详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9B%BE%E5%B1%82%E6%AC%A1%E8%B7%9D%E7%A6%BB-GHD-%E5%AE%9A%E4%B9%89"><span class="toc-number"></span> <span class="toc-text">1. 图层次距离(GHD)定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B1%82%E6%AC%A1%E8%B7%9D%E7%A6%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A0%81-HDSE"><span class="toc-number"></span> <span class="toc-text">2. 层次距离结构编码(HDSE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-HDSE%E5%9C%A8%E5%9B%BE%E8%BD%AC%E6%8D%A2%E5%99%A8%E4%B8%AD%E7%9A%84%E9%9B%86%E6%88%90"><span class="toc-number"></span> <span class="toc-text">3. HDSE在图转换器中的集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%9B%BE%E7%9A%84%E9%AB%98%E7%BA%A7HDSE"><span class="toc-number"></span> <span class="toc-text">4. 大规模图的高级HDSE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number"></span> <span class="toc-text">5. 理论基础</span></a></li></ol></li></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/HDSE.html" title="论文阅读：HDSE"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="论文阅读：HDSE"></a><div class="content"><a class="title" href="/posts/HDSE.html" title="论文阅读：HDSE">论文阅读：HDSE</a><time datetime="2025-11-05T07:38:12.000Z" title="发表于 2025-11-05 15:38:12">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/SPSE.html" title="论文阅读：Simple Path Structural Encoding"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="论文阅读：Simple Path Structural Encoding"></a><div class="content"><a class="title" href="/posts/SPSE.html" title="论文阅读：Simple Path Structural Encoding">论文阅读：Simple Path Structural Encoding</a><time datetime="2025-10-27T08:47:27.000Z" title="发表于 2025-10-27 16:47:27">2025-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Primphormer.html" title="论文阅读：Primphormer"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="论文阅读：Primphormer"></a><div class="content"><a class="title" href="/posts/Primphormer.html" title="论文阅读：Primphormer">论文阅读：Primphormer</a><time datetime="2025-10-25T05:20:01.000Z" title="发表于 2025-10-25 13:20:01">2025-10-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/90649c8.html" title="动态图基础 ｜ Dynamic Graphs"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="动态图基础 ｜ Dynamic Graphs"></a><div class="content"><a class="title" href="/posts/90649c8.html" title="动态图基础 ｜ Dynamic Graphs">动态图基础 ｜ Dynamic Graphs</a><time datetime="2025-10-23T16:32:11.000Z" title="发表于 2025-10-24 00:32:11">2025-10-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3374f76a.html" title="Graph Transformer中的问题 ｜ Problems With Graph Transformers"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/GNNCover.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Graph Transformer中的问题 ｜ Problems With Graph Transformers"></a><div class="content"><a class="title" href="/posts/3374f76a.html" title="Graph Transformer中的问题 ｜ Problems With Graph Transformers">Graph Transformer中的问题 ｜ Problems With Graph Transformers</a><time datetime="2025-10-23T11:49:46.000Z" title="发表于 2025-10-23 19:49:46">2025-10-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image:url(/img/GNNCover.png)"><div id="footer-wrap"><div class="copyright">&copy;2025 By EpsilonZ</div><div class="framework-info"><span>框架</span> <a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题</span> <a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><div class="app-refresh" id="app-refresh" style="position:fixed;top:-2.2rem;left:0;right:0;z-index:99999;padding:0 1rem;font-size:15px;height:2.2rem;transition:all .3s ease"><div class="app-refresh-wrap" style="display:flex;color:#fff;height:100%;align-items:center;justify-content:center"><label>✨ 有新文章啦！ 👉</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color:#fff;text-decoration:underline;cursor:pointer">偷偷看一看 👀</span></a></div></div><script>if ('serviceWorker' in navigator) {
+if (navigator.serviceWorker.controller) {
+navigator.serviceWorker.addEventListener('controllerchange', function() {
+showNotification()
+})
+}
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+})
+}
+function showNotification() {
+if (GLOBAL_CONFIG.Snackbar) {
+var snackbarBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+GLOBAL_CONFIG.Snackbar.bgLight :
+GLOBAL_CONFIG.Snackbar.bgDark
+var snackbarPos = GLOBAL_CONFIG.Snackbar.position
+Snackbar.show({
+text: '✨ 有新文章啦！ 👉',
+backgroundColor: snackbarBg,
+duration: 500000,
+pos: snackbarPos,
+actionText: '🍗点击食用🍔',
+actionTextColor: '#fff',
+onActionClick: function(e) {
+location.reload()
+},
+})
+} else {
+var showBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+'#3b70fc' :
+'#1f1f1f'
+var cssText = `top: 0; background: ${showBg};`
+document.getElementById('app-refresh').style.cssText = cssText
+}
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i> <span>数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><script data-pjax>function butterfly_footer_beautify_injector_config(){var t=document.getElementById("footer-wrap");console.log("已挂载butterfly_footer_beautify"),t.insertAdjacentHTML("beforeend",'<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a></p>')}for(var elist="null".split(","),cpage=location.pathname,epage="all",flag=0,i=0;i<elist.length;i++)cpage.includes(elist[i])&&flag++;"all"===epage&&0==flag?butterfly_footer_beautify_injector_config():epage===cpage&&butterfly_footer_beautify_injector_config()</script><script async src="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.js"></script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async>for(var arr=document.getElementsByClassName("recent-post-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset","30"),arr[i].setAttribute("data-wow-iteration","1")</script><script async>for(var arr=document.getElementsByClassName("card-widget"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration",""),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("article-sort-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__slideInRight"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script></body></html>
