@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>在Xcode Cloud上为React Native+Expo项目设置CI/CD</title>
+      <link href="/posts/expo-ios-cicd.html"/>
+      <url>/posts/expo-ios-cicd.html</url>
+      
+        <content type="html"><![CDATA[<p><em>注：本文为AI生成，但由于可以解决问题，因此记录为备份</em></p><p>关于在本地使用React Native + Expo写的项目iOS端如何编译的可能有用的AI回答<a href="./expo-ios-cicd/more.pdf">文件</a>.</p><h3 id="在-Xcode-Cloud-上为-React-Native-Expo-项目设置-CI-CD"><a href="#在-Xcode-Cloud-上为-React-Native-Expo-项目设置-CI-CD" class="headerlink" title="在 Xcode Cloud 上为 React Native + Expo 项目设置 CI/CD"></a>在 Xcode Cloud 上为 React Native + Expo 项目设置 CI/CD</h3><p>将 React Native + Expo 项目集成到 Xcode Cloud 的持续集成与持续交付 (CI/CD) 流程中是完全可行的。其核心在于配置自定义构建脚本，以告知 Xcode Cloud 的构建环境如何处理 JavaScript 依赖（如 npm/yarn）和原生 iOS 依赖（CocoaPods）。</p><p>通过以下步骤，您可以实现从代码提交到 TestFlight 自动分发的完整自动化流程。</p><hr><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>在开始之前，请确保您已准备好以下各项：</p><ol><li><strong>Apple Developer Program 成员资格</strong>：访问 Xcode Cloud 是付费开发者账户的权益。</li><li><strong>项目源码托管</strong>：您的项目代码必须托管在 Xcode Cloud 支持的 Git 仓库服务上，如 GitHub, Bitbucket, 或 GitLab。</li><li><strong>Xcode</strong>：确保您的 Mac 上安装了最新版本的 Xcode。</li><li><strong>原生 iOS 项目</strong>：Xcode Cloud 直接构建的是原生 <code>.xcodeproj</code> 或 <code>.xcworkspace</code> 文件。因此，您需要将 Expo 项目“预构建”以生成 <code>ios</code> 目录。</li></ol><hr><h3 id="核心理念：使用自定义脚本搭建桥梁"><a href="#核心理念：使用自定义脚本搭建桥梁" class="headerlink" title="核心理念：使用自定义脚本搭建桥梁"></a>核心理念：使用自定义脚本搭建桥梁</h3><p>Xcode Cloud 的构建环境是为原生 Apple 开发而设计的，默认情况下，它并不知道如何处理 Node.js、npm/yarn 包或 CocoaPods。为了解决这个问题，我们需要创建一个自定义构建脚本。当 Xcode Cloud 克隆您的代码仓库后，它会自动执行这个脚本来安装所有必要的非原生依赖，为后续的原生 Xcode 构建做好准备。</p><hr><h3 id="分步指南"><a href="#分步指南" class="headerlink" title="分步指南"></a>分步指南</h3><h4 id="第-1-步：生成原生-iOS-项目"><a href="#第-1-步：生成原生-iOS-项目" class="headerlink" title="第 1 步：生成原生 iOS 项目"></a>第 1 步：生成原生 iOS 项目</h4><p>如果您的 Expo 项目仍处于“托管工作流”（Managed Workflow）下，即项目根目录中没有 <code>ios</code> 和 <code>android</code> 文件夹，您需要先生成原生项目文件。</p><p>在您的项目根目录下打开终端，运行以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx expo prebuild --platform ios</span><br></pre></td></tr></table></figure><p>此命令会根据您的 <code>app.json</code> / <code>app.config.js</code> 配置生成一个 <code>ios</code> 文件夹，其中包含了 Xcode 所需的 <code>.xcworkspace</code> 文件。</p><p><strong>重要提示</strong>：运行 <code>prebuild</code> 是一项重大更改。请确保在执行前已提交所有代码，并建议在一个新的分支上进行此操作。命令执行后，将新生成的 <code>ios</code> 目录、以及对 <code>.gitignore</code> 等文件的修改一并提交到您的 Git 仓库。</p><h4 id="第-2-步：创建自定义构建脚本"><a href="#第-2-步：创建自定义构建脚本" class="headerlink" title="第 2 步：创建自定义构建脚本"></a>第 2 步：创建自定义构建脚本</h4><p>这是整个流程中最关键的一步。Xcode Cloud 会在特定时机自动查找并执行名为 <code>ci_scripts</code> 文件夹下的特定脚本。我们将使用 <code>ci_post_clone.sh</code> 脚本，它在 Xcode Cloud 克隆完您的仓库后立即执行。</p><ol><li><p><strong>创建目录</strong>：在您的项目根目录（与 <code>.xcodeproj</code> 文件同级）下创建一个名为 <code>ci_scripts</code> 的文件夹。</p></li><li><p><strong>创建脚本文件</strong>：在 <code>ci_scripts</code> 文件夹内，创建一个新文件，并将其命名为 <code>ci_post_clone.sh</code>。</p></li><li><p><strong>编写脚本内容</strong>：将以下内容粘贴到 <code>ci_post_clone.sh</code> 文件中。此脚本将安装 Homebrew（如果不存在）、Node.js、Yarn，并安装所有 JavaScript 和 CocoaPods 依赖。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/zsh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印当前所在阶段</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🚀 Stage: Post-clone is running...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 Homebrew 路径并安装（适用于 Apple Silicon 和 Intel Mac 的通用设置）</span></span><br><span class="line"><span class="keyword">if</span> [ -d <span class="string">&quot;/opt/homebrew&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment"># Apple Silicon</span></span><br><span class="line">    <span class="built_in">export</span> HOMEBREW_PREFIX=<span class="string">&quot;/opt/homebrew&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment"># Intel</span></span><br><span class="line">    <span class="built_in">export</span> HOMEBREW_PREFIX=<span class="string">&quot;/usr/local&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$HOMEBREW_PREFIX</span>/bin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Node.js 和 Yarn</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🍺 Installing Node.js and Yarn via Homebrew...&quot;</span></span><br><span class="line">brew install node yarn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印 Node 和 Yarn 版本以供调试</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Node version: <span class="subst">$(node -v)</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Yarn version: <span class="subst">$(yarn -v)</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 JavaScript 依赖</span></span><br><span class="line"><span class="comment"># CI_PRIMARY_REPOSITORY_PATH 是 Xcode Cloud 指向项目根目录的环境变量</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📦 Installing JavaScript dependencies...&quot;</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$CI_PRIMARY_REPOSITORY_PATH</span></span><br><span class="line">yarn install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 CocoaPods 依赖</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🍫 Installing CocoaPods dependencies...&quot;</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$CI_PRIMARY_REPOSITORY_PATH</span>/ios</span><br><span class="line">pod install</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;✅ Stage: Post-clone finished successfully.&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li><li><p><strong>授予执行权限</strong>：该脚本文件必须具有可执行权限。在终端中运行以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ci_scripts/ci_post_clone.sh</span><br></pre></td></tr></table></figure></li><li><p><strong>提交脚本</strong>：将 <code>ci_scripts</code> 文件夹及其中的 <code>ci_post_clone.sh</code> 文件提交到您的 Git 仓库。</p></li></ol><h4 id="第-3-步：在-Xcode-Cloud-中配置工作流"><a href="#第-3-步：在-Xcode-Cloud-中配置工作流" class="headerlink" title="第 3 步：在 Xcode Cloud 中配置工作流"></a>第 3 步：在 Xcode Cloud 中配置工作流</h4><p>现在，您的项目已经准备就绪。接下来是在 Xcode 中设置 Xcode Cloud。</p><ol><li><p><strong>打开项目</strong>：用 Xcode 打开您项目中的 <code>ios/*.xcworkspace</code> 文件。</p></li><li><p><strong>打开 Xcode Cloud 标签</strong>：在 Xcode 的左侧导航栏中，选择“Report Navigator”（报告导航器，图标像一个对话气泡），然后选择顶部的 “Cloud” 标签。</p></li><li><p><strong>开始配置</strong>：Xcode 可能会提示您“Set up Xcode Cloud”。点击并按照向导进行操作。</p><ul><li><strong>授权</strong>：授权 Xcode 访问您的 Git 仓库。</li><li><strong>创建工作流 (Workflow)</strong>：Xcode 会分析您的项目并建议一个默认工作流。</li></ul></li><li><p><strong>编辑工作流配置</strong>：</p><ul><li><strong>常规 (General)</strong>：为您的工作流命名，并选择产品（您的 App）。</li><li><strong>环境 (Environment)</strong>：选择最新的稳定版 Xcode 和 macOS。可以根据需要设置环境变量。</li><li><strong>开始条件 (Start Conditions)</strong>：配置触发构建的条件。例如，您可以设置为当代码推送到 <code>main</code> 或 <code>develop</code> 分支时自动开始构建。</li><li><strong>操作 (Actions)</strong>：<ul><li><strong>Archive</strong>：这是核心操作。确保选择正确的平台（iOS）和 Scheme。Xcode Cloud 会自动发现并使用您的 <code>ci_post_clone.sh</code> 脚本，无需在此处额外配置。</li></ul></li><li><strong>部署后操作 (Post-Actions)</strong>：<ul><li><strong>TestFlight (Internal/External Testing)</strong>：配置此项可实现构建成功后自动将 App 上传到 App Store Connect 并分发给内部或外部测试人员。</li></ul></li></ul></li><li><p><strong>保存并开始第一次构建</strong>：保存您的工作流配置。您可以手动触发第一次构建，或通过向您配置的启动分支（如 <code>main</code>）推送一次提交来触发。</p></li></ol><hr><h3 id="常见问题与最佳实践"><a href="#常见问题与最佳实践" class="headerlink" title="常见问题与最佳实践"></a>常见问题与最佳实践</h3><ul><li><strong>构建缓慢</strong>：由于 Xcode Cloud 的构建环境是临时的，每次构建都需要重新通过 Homebrew 安装 Node.js 和其他依赖，这会比 <code>eas build</code> 或本地构建慢。这是使用 Xcode Cloud 处理 React Native 项目的正常现象。</li><li><strong>管理密钥/环境变量</strong>：如果您的项目需要 API 密钥或其他敏感信息，请不要硬编码在代码中。应在 Xcode Cloud 工作流配置的“Environment”部分，将它们添加为<strong>秘密 (Secret)</strong> 环境变量。选中 “Secret” 复选框可防止其值在构建日志中暴露。</li><li><strong>调试构建失败</strong>：如果构建失败，请仔细查看 Xcode Cloud 提供的构建日志。日志会详细记录 <code>ci_post_clone.sh</code> 脚本的每一步输出，通常可以从中找到错误原因，例如依赖安装失败或脚本语法错误。</li><li><strong>选择 Xcode Cloud 还是 EAS Build？</strong><ul><li><strong>EAS Build</strong>：由 Expo 团队提供，是为 React Native 和 Expo 项目量身定制的 CI/CD 服务。它通常开箱即用，配置更简单，构建速度更快。</li><li><strong>Xcode Cloud</strong>：是苹果官方的 CI/CD 方案。如果您的团队已经深度集成在苹果生态中，或者您的项目除了 React Native App 外还包含其他原生目标（如 watchOS App、小组件等），或者公司政策要求使用第一方工具，那么 Xcode Cloud 是一个绝佳的选择。</li></ul></li></ul><p>通过以上配置，您的 React Native + Expo 项目就可以享受苹果原生 CI/CD 带来的便利，实现高效、可靠的自动化构建与分发。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> iOS dev </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> iOS dev </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>How to use python effectively step by step</title>
       <link href="/posts/python-env.html"/>
       <url>/posts/python-env.html</url>
@@ -22,9 +47,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> Env </tag>
+            
+            <tag> Python </tag>
             
         </tags>
       
@@ -442,9 +467,9 @@
       
         <tags>
             
-            <tag> Env </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Env </tag>
             
         </tags>
       
@@ -865,6 +890,17 @@
     
     <entry>
       <title></title>
+      <link href="/manifest.json"/>
+      <url>/manifest.json</url>
+      
+        <content type="html"><![CDATA[{"name":"EpsilonZ `Blog","short_name":"EpsilonZ","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/16.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/32.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/48.png","sizes":"48x48","type":"image/png"},{"src":"/img/siteicon/64.png","sizes":"64x64","type":"image/png"},{"src":"/img/siteicon/128.png","sizes":"128x128","type":"image/png"},{"src":"/img/siteicon/144.png","sizes":"144x144","type":"image/png"},{"src":"/img/siteicon/512.png","sizes":"512x512","type":"image/png"}],"splash_pages":null}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
       <link href="/google7e7b55ce6b603fc5.html"/>
       <url>/google7e7b55ce6b603fc5.html</url>
       
@@ -875,11 +911,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/manifest.json"/>
-      <url>/manifest.json</url>
+      <title>分类 ｜ Categories</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
-        <content type="html"><![CDATA[{"name":"EpsilonZ `Blog","short_name":"EpsilonZ","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/16.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/32.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/48.png","sizes":"48x48","type":"image/png"},{"src":"/img/siteicon/64.png","sizes":"64x64","type":"image/png"},{"src":"/img/siteicon/128.png","sizes":"128x128","type":"image/png"},{"src":"/img/siteicon/144.png","sizes":"144x144","type":"image/png"},{"src":"/img/siteicon/512.png","sizes":"512x512","type":"image/png"}],"splash_pages":null}]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -902,17 +938,6 @@
       <url>/css/custom.css</url>
       
         <content type="html"><![CDATA[/* @font-face {  font-family: Candyhome;  src: url(https://npm.elemecdn.com/anzhiyu-blog@1.1.6/fonts/Candyhome.ttf);  font-display: swap;  font-weight: lighter;} */@font-face {    font-family: ZhuZiAYuanJWD;    src: url(https://npm.elemecdn.com/anzhiyu-blog@1.1.6/fonts/ZhuZiAWan.woff2);    font-display: swap;    font-weight: lighter;}div#menus {    font-family: "ZhuZiAYuanJWD";}h1#site-title {    font-family: ZhuZiAYuanJWD;    font-size: 3em !important;}a.article-title,a.blog-slider__title,a.categoryBar-list-link,h1.post-title {    font-family: ZhuZiAYuanJWD;}.iconfont {    font-family: "iconfont" !important;    font-size: 3em;    /* 可以定义图标大小 */    font-style: normal;    -webkit-font-smoothing: antialiased;    -moz-osx-font-smoothing: grayscale;}/* 时间轴生肖icon */svg.icon {    /* 这里定义svg.icon，避免和Butterfly自带的note标签冲突 */    width: 1em;    height: 1em;    /* width和height定义图标的默认宽度和高度*/    vertical-align: -0.15em;    fill: currentColor;    overflow: hidden;}.icon-zhongbiao::before {    color: #f7c768;}/* bilibli番剧插件 */#article-container .bangumi-tab.bangumi-active {    background: var(--anzhiyu-theme);    color: var(--anzhiyu-ahoverbg);    border-radius: 10px;}a.bangumi-tab:hover {    text-decoration: none !important;}.bangumi-button:hover {    background: var(--anzhiyu-theme) !important;    border-radius: 10px !important;    color: var(--anzhiyu-ahoverbg) !important;}a.bangumi-button.bangumi-nextpage:hover {    text-decoration: none !important;}.bangumi-button {    padding: 5px 10px !important;}a.bangumi-tab {    padding: 5px 10px !important;}svg.icon.faa-tada {    font-size: 1.1em;}.bangumi-info-item {    border-right: 1px solid #f2b94b;}.bangumi-info-item span {    color: #f2b94b;}.bangumi-info-item em {    color: #f2b94b;}/* 解决artitalk的图标问题 */#uploadSource>svg {    width: 1.19em;    height: 1.5em;}/*top-img黑色透明玻璃效果移除，不建议加，除非你执着于完全一图流或者背景图对比色明显 */#page-header:not(.not-top-img):before {    background-color: transparent !important;}/* 首页文章卡片 */#recent-posts>.recent-post-item {    background: rgba(255, 255, 255, 0.9);}/* 首页侧栏卡片 */#aside-content .card-widget {    background: rgba(255, 255, 255, 0.9);}/* 文章页面正文背景 */div#post {    background: rgba(255, 255, 255, 0.9);}/* 分页页面 */div#page {    background: rgba(255, 255, 255, 0.9);}/* 归档页面 */div#archive {    background: rgba(255, 255, 255, 0.9);}/* 标签页面 */div#tag {    background: rgba(255, 255, 255, 0.9);}/* 分类页面 */div#category {    background: rgba(255, 255, 255, 0.9);}/*夜间模式伪类遮罩层透明*/[data-theme="dark"] #recent-posts>.recent-post-item {    background: #121212;}[data-theme="dark"] .card-widget {    background: #121212 !important;}[data-theme="dark"] div#post {    background: #121212 !important;}[data-theme="dark"] div#tag {    background: #121212 !important;}[data-theme="dark"] div#archive {    background: #121212 !important;}[data-theme="dark"] div#page {    background: #121212 !important;}[data-theme="dark"] div#category {    background: #121212 !important;}[data-theme="dark"] div#category {    background: transparent !important;}/* 页脚透明 */#footer {    background: transparent !important;}/* 头图透明 */#page-header {    background: transparent !important;}#rightside>div>button {    border-radius: 5px;}/* 滚动条 */::-webkit-scrollbar {    width: 10px;    height: 10px;}::-webkit-scrollbar-thumb {    background-color: #3b70fc;    border-radius: 2em;}::-webkit-scrollbar-corner {    background-color: transparent;}::-moz-selection {    color: #fff;    background-color: #3b70fc;}/* 音乐播放器 *//* .aplayer .aplayer-lrc {  display: none !important;} */.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {    left: -66px !important;    transition: all 0.3s;    /* 默认情况下缩进左侧66px，只留一点箭头部分 */}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {    left: 0 !important;    transition: all 0.3s;    /* 鼠标悬停是左侧缩进归零，完全显示按钮 */}.aplayer.aplayer-fixed {    z-index: 999999 !important;}/* 评论框  */.vwrap {    box-shadow: 2px 2px 5px #bbb;    background: rgba(255, 255, 255, 0.3);    border-radius: 8px;    padding: 30px;    margin: 30px 0px 30px 0px;}/* 设置评论框 */.vcard {    box-shadow: 2px 2px 5px #bbb;    background: rgba(255, 255, 255, 0.3);    border-radius: 8px;    padding: 30px;    margin: 30px 0px 0px 0px;}/* md网站下划线 */#article-container a:hover {    text-decoration: none !important;}#article-container #hpp_talk p img {    display: inline;}/* 404页面 */#error-wrap {    position: absolute;    top: 40%;    right: 0;    left: 0;    margin: 0 auto;    padding: 0 1rem;    max-width: 1000px;    transform: translate(0, -50%);}#error-wrap .error-content {    display: flex;    flex-direction: row;    justify-content: center;    align-items: center;    margin: 0 1rem;    height: 18rem;    border-radius: 8px;    background: var(--card-bg);    box-shadow: var(--card-box-shadow);    transition: all 0.3s;}#error-wrap .error-content .error-img {    box-flex: 1;    flex: 1;    height: 100%;    border-top-left-radius: 8px;    border-bottom-left-radius: 8px;    background-color: #3b70fc;    background-position: center;    background-size: cover;}#error-wrap .error-content .error-info {    box-flex: 1;    flex: 1;    padding: 0.5rem;    text-align: center;    font-size: 14px;    font-family: Titillium Web, "PingFang SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft YaHei", sans-serif;}#error-wrap .error-content .error-info .error_title {    margin-top: -4rem;    font-size: 9em;}#error-wrap .error-content .error-info .error_subtitle {    margin-top: -3.5rem;    word-break: break-word;    font-size: 1.6em;}#error-wrap .error-content .error-info a {    display: inline-block;    margin-top: 0.5rem;    padding: 0.3rem 1.5rem;    background: var(--btn-bg);    color: var(--btn-color);}#body-wrap.error .aside-list {    display: flex;    flex-direction: row;    flex-wrap: nowrap;    bottom: 0px;    position: absolute;    padding: 1rem;    width: 100%;    overflow: scroll;}#body-wrap.error .aside-list .aside-list-group {    display: flex;    flex-direction: row;    flex-wrap: nowrap;    max-width: 1200px;    margin: 0 auto;}#body-wrap.error .aside-list .aside-list-item {    padding: 0.5rem;}#body-wrap.error .aside-list .aside-list-item img {    width: 100%;    object-fit: cover;    border-radius: 12px;}#body-wrap.error .aside-list .aside-list-item .thumbnail {    overflow: hidden;    width: 230px;    height: 143px;    background: var(--anzhiyu-card-bg);    display: flex;}#body-wrap.error .aside-list .aside-list-item .content .title {    -webkit-line-clamp: 2;    overflow: hidden;    display: -webkit-box;    -webkit-box-orient: vertical;    line-height: 1.5;    justify-content: center;    align-items: flex-end;    align-content: center;    padding-top: 0.5rem;    color: white;}#body-wrap.error .aside-list .aside-list-item .content time {    display: none;}/* 代码框主题 */#article-container figure.highlight {    border-radius: 10px;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类 ｜ Categories</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
