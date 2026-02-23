@@ -7,8 +7,6 @@ Allow: /tags/
 Allow: /sitemap.xml
 
 Disallow: /vendors/
-Disallow: /js/
-Disallow: /css/
 Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
