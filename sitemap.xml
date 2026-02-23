@@ -2,25 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://epsilonzyj.github.io/manifest.json</loc>
-    
-    <lastmod>2026-02-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://epsilonzyj.github.io/tags/index.html</loc>
-    
-    <lastmod>2026-02-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://epsilonzyj.github.io/google7e7b55ce6b603fc5.html</loc>
     
     <lastmod>2026-02-23</lastmod>
     
@@ -101,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/posts/2dd1331a.html</loc>
+    <loc>https://epsilonzyj.github.io/posts/2286d822.html</loc>
     
     <lastmod>2026-02-23</lastmod>
     
@@ -110,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://epsilonzyj.github.io/posts/2286d822.html</loc>
+    <loc>https://epsilonzyj.github.io/posts/2dd1331a.html</loc>
     
     <lastmod>2026-02-23</lastmod>
     
