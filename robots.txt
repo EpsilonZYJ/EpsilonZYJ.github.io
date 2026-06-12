@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /vendors/
-Disallow: /fonts/
-Disallow: /fancybox/
-
-Sitemap: https://epsilonzyj.github.io/sitemap.xml
