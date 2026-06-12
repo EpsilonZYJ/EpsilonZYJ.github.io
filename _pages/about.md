@@ -35,9 +35,23 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 - *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 - *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  -->
 
-# 📝 Publications 
+<!-- # 📝 Publications  -->
 
-Proceeding ...
+# 📝 Research
+
+<div class='paper-box' markdown="1">
+
+**Research on Efficient Heuristic Algorithms for Blocking Flow-shop Scheduling Problem**
+
+- Developed a high-performance C++ solver for the Blocking Flow-shop Scheduling Problem (BFSP) utilizing an improved Discrete Invasive Weed Optimization (DIWO) algorithm.
+- Engineered a hybrid algorithmic framework by integrating PF-NEH initialization and SRLS local search to enhance solution quality and convergence speed.
+- Optimized the neighborhood evaluation function, successfully reducing computational complexity from O(mn²) to O(mn), which significantly accelerated the solving process.
+- Validated the algorithm on Taillard’s benchmark instances, achieving superior precision with an Average Relative Percentage Deviation (ARPD) as low as 1.78%.
+- Contributed to the design and implementation of core software modules and conducted extensive performance tuning.
+
+[[Code]](https://github.com/yunbow30944/BFSP-DIWO)
+
+</div>
 
 <!-- <div class='paper-box'><div class='paper-box-image'><div><div class="badge">CVPR 2016</div><img src='images/500x300.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
@@ -54,6 +68,45 @@ Proceeding ...
 - [Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet](https://github.com), A, B, C, **CVPR 2020** -->
 
 # 🚀 Projects
+<div class='paper-box' markdown="1">
+
+**RISC-V Proxy Operating System Kernel**
+
+- Developed a multi-core, concurrency-safe proxy OS kernel based on the RISC-V architecture using the Spike simulator.
+- Implemented Sv39 virtual memory with Copy-on-Write (CoW) mechanisms, optimizing memory overhead through page table permission control and page reference counting.
+- Engineered process management and scheduling modules (fork, yield, wait) utilizing Round-Robin scheduling and synchronization primitives like semaphores and spinlocks.
+- Designed a Virtual File System (VFS) abstraction layer supporting comprehensive file operations, directories, links, and relative path resolution.
+- Created an interactive Shell featuring command history and environment variables, while implementing kernel-supported pipes for IPC and dynamic multi-core background task scheduling.  
+
+[[Code]](https://github.com/EpsilonZYJ/riscv-pke)
+
+</div>
+<div class='paper-box' markdown="1">
+
+**RMDB Relational Database Management System**
+
+- Implemented SQL lexical and syntax parsing based on Flex/Bison, constructed the AST, and completed semantic
+analysis including column binding, type checking, and conditional expression validation.
+- Built a rule-based query optimizer and a Volcano-model execution engine, supporting operators such as
+predicate pushdown, projection pushdown, index selection, and join plan generation.
+- Designed a page-based storage architecture, buffer pool, and B+ tree composite indexes, supporting
+equality queries, range scans, and leftmost-prefix matching.
+- Implemented transaction rollback and MVCC-based snapshot visibility control, and built a logging and recovery framework to support database crash recovery.
+
+[[Code]](https://github.com/EpsilonZYJ/db2025-yoursql)
+
+</div>
+<div class='paper-box' markdown="1">
+
+**Real-time Monitoring Robot System based on YOLOv7**
+
+- Managed the collection, cleaning, and preprocessing of multi-class datasets (smoking, fighting, falling, littering) and fine-tuned the YOLOv7 framework to optimize detection accuracy and inference speed for specialized surveillance scenarios.
+- Implemented a multi-model object detection system integrated with the SORT tracking algorithm to ensure stable target persistence in complex environments; developed a sliding window algorithm for video stream processing to enable effective recognition of continuous temporal behaviors.
+- Designed and deployed an "End-Edge-Cloud" system architecture utilizing the MQTT protocol for efficient data transmission between robots and backend servers; built a comprehensive monitoring client using Dear PyGui to facilitate a seamless workflow from video input and model inference to real-time result visualization. 
+
+[[Code]](https://github.com/EpsilonZYJ/NUS-SOC)
+
+</div>
 
 # 🎖 Honors and Awards
 - *2024-2026* Outstanding Undergraduate in Term of Academic Performance (Top 1% at HUST)

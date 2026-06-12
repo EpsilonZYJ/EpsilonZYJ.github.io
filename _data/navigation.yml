@@ -9,8 +9,11 @@ main:
   # - title: "News"
   #   url: "/#-news"
 
-  - title: "Publications"
-    url: "/#-publications"
+  # - title: "Publications"
+  #   url: "/#-publications"
+
+  - title: "Research"
+    url: "/#-research"
 
   - title: "Projects"
     url: "/#-projects"
