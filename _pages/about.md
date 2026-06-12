@@ -17,7 +17,7 @@ redirect_from:
 
 <span class='anchor' id='about-me'></span>
 
-I am currently an undergraduate student at *Huazhong University of Science and Technology*, majoring in Computer Science and Technology under the Experimental Program for Exemplary Engineer Education. Now I am researching in the field of GNN and Graph Transformer under the supervision of *Prof. [Kun He](https://scholar.google.com/citations?hl=zh-CN&user=YTQnGJsAAAAJ&view_op=list_works&sortby=pubdate)*. Addtionally, I am also interested in computer systems and database systems.
+I am currently an undergraduate student at *Huazhong University of Science and Technology*, majoring in Computer Science and Technology under the Experimental Program for Exemplary Engineer Education. Now I am researching in the field of GNN and Graph Transformer under the supervision of *Prof. [Kun He](https://scholar.google.com/citations?hl=zh-CN&user=YTQnGJsAAAAJ&view_op=list_works&sortby=pubdate)*. Additionally, I am also interested in computer systems and database systems.
 
 - CV: [EN](https://epsilonzyj.github.io/blog/about/cv-en.pdf) ｜ [ZH-CN](https://epsilonzyj.github.io/blog/about/cv-zh-CN.pdf)
 
