@@ -1,7 +1,8 @@
 ---
 permalink: /
-title: ""
-excerpt: ""
+title: "Yujie Zhou"
+excerpt: "Yujie Zhou personal homepage."
+description: "Yujie Zhou - Undergraduate in CS at HUST, interests in GNN, Graph Transformer, systems and databases."
 author_profile: true
 redirect_from: 
   - /about/
