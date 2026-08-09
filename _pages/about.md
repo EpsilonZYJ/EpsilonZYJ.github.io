@@ -96,7 +96,7 @@ predicate pushdown, projection pushdown, index selection, and join plan generati
 equality queries, range scans, and leftmost-prefix matching.
 - Implemented transaction rollback and MVCC-based snapshot visibility control, and built a logging and recovery framework to support database crash recovery.
 
-[[Code]](https://github.com/EpsilonZYJ/db2025-yoursql)
+[[Code]](https://github.com/EpsilonZYJ/RMDB)
 
 </div>
 <div class='paper-box' markdown="1">
