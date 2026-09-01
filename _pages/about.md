@@ -38,6 +38,12 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 - *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 - *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  -->
 
+# 💻 Internships
+
+<img class="jpg" src="/images/tencent-logo.png" width="100pt"> Tencent, Shenzhen, China
+<br>
+- *Sept. 2026 - present*, Tencent IEG · LIGHTSPEED STUDIOS, Backend Development Intern.
+
 <!-- # 📝 Publications  -->
 
 # 📝 Research
@@ -121,6 +127,3 @@ equality queries, range scans, and leftmost-prefix matching.
 <!-- # 💬 Invited Talks
 - *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 - *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/) -->
-
-<!-- # 💻 Internships
-- *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->

@@ -6,6 +6,9 @@ main:
   - title: "Educations"
     url: "/#-educations"
 
+  - title: "Internships"
+    url: "/#-internships"
+
   # - title: "News"
   #   url: "/#-news"
 
@@ -23,9 +26,6 @@ main:
 
   # - title: "Invited Talks"
   #   url: "/#-invited-talks"
-
-  # - title: "Internships"
-  #   url: "/#-internships"
 
   - title: "Blog"
     url: "/blog/"
