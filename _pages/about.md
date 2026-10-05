@@ -28,7 +28,7 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 
 <img class="jpg" src="/images/hust-logo.jpg" width="50pt"> Huazhong University of Science and Technology
 <br>
-- *Sept. 2023 - Jun. 2027*, Bachelor of Engineering in Computer Science and Technology, GPA: 4.71/5.00, Rank: **1**/30.
+- *Sept. 2023 - Jun. 2027*, Bachelor of Engineering in Computer Science and Technology, GPA: 4.71/5.00 (university scale) \| **4.0**/4.0 (WES U.S. equivalency), Rank: **1**/30.
 
 <img class="jpg" src="/images/nus-logo.jpg" width="50pt"> National University of Singapore
 <br>
@@ -50,7 +50,23 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 
 <div class='paper-box' markdown="1">
 
+**HANFormer: Retrieving Hop-Aware and Nonlocal Context for Tokenized Graph Transformer in Node Classification**
+
+*Instructor: Prof. Kun He*
+
+- Proposed a Transformer-based framework for node classification that jointly models multi-hop local structure and long-range global context.
+- Constructed a Hop-Aware token sequence by similarity-weighted aggregation of features from each local hop, preserving hop-specific information while reducing noisy neighborhood signals.
+- Developed a Global-Similarity token sequence that samples informative nodes with similar feature representations beyond the local K-hop neighborhood, enabling long-range dependency modeling.
+- Incorporated token-type embeddings and relative-hop attention biases to distinguish self, local-hop, and global-similarity tokens with different topological semantics.
+- Implemented a reproducible PyTorch evaluation pipeline and benchmarked HANFormer against GNN and Graph Transformer baselines across multiple public datasets; under the best configuration, achieved gains of at least 0.5 pp on several benchmarks.
+
+</div>
+
+<div class='paper-box' markdown="1">
+
 **Research on Efficient Heuristic Algorithms for Blocking Flow-shop Scheduling Problem**
+
+*Instructor: [Junwen Ding](https://scholar.google.com/citations?user=BDoe4iEAAAAJ&hl=en) (Associate Professor); National Innovation and Entrepreneurship Training Program for College Students*
 
 - Developed a high-performance C++ solver for the Blocking Flow-shop Scheduling Problem (BFSP) utilizing an improved Discrete Invasive Weed Optimization (DIWO) algorithm.
 - Engineered a hybrid algorithmic framework by integrating PF-NEH initialization and SRLS local search to enhance solution quality and convergence speed.
