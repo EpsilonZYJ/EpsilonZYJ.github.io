@@ -48,7 +48,7 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 
 # 📝 Research
 
-<div class='paper-box' markdown="1">
+<div class='paper-box paper-box-full' markdown="1">
 
 **HANFormer: Retrieving Hop-Aware and Nonlocal Context for Tokenized Graph Transformer in Node Classification**
 
@@ -62,7 +62,7 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 
 </div>
 
-<div class='paper-box' markdown="1">
+<div class='paper-box paper-box-full' markdown="1">
 
 **Research on Efficient Heuristic Algorithms for Blocking Flow-shop Scheduling Problem**
 
@@ -93,7 +93,7 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 - [Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet](https://github.com), A, B, C, **CVPR 2020** -->
 
 # 🚀 Projects
-<div class='paper-box' markdown="1">
+<div class='paper-box paper-box-full' markdown="1">
 
 **RISC-V Proxy Operating System Kernel**
 
@@ -106,7 +106,7 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 [[Code]](https://github.com/EpsilonZYJ/riscv-pke)
 
 </div>
-<div class='paper-box' markdown="1">
+<div class='paper-box paper-box-full' markdown="1">
 
 **RMDB Relational Database Management System**
 
@@ -121,7 +121,7 @@ equality queries, range scans, and leftmost-prefix matching.
 [[Code]](https://github.com/EpsilonZYJ/RMDB)
 
 </div>
-<div class='paper-box' markdown="1">
+<div class='paper-box paper-box-full' markdown="1">
 
 **Real-time Monitoring Robot System based on YOLOv7**
 

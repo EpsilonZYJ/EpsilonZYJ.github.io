@@ -74,7 +74,7 @@
             max-width: 40%;
             order: 1;
         }
-        
+
         .paper-box-text{
             justify-content: left;
             padding-left: 2em;
@@ -85,6 +85,14 @@
     }
 
 
+}
+
+/* text-only entries: stack paragraphs vertically instead of
+   treating each paragraph/list as a flex item in a row */
+.paper-box.paper-box-full {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
 }
 
 $scroll_offset : 2em;
