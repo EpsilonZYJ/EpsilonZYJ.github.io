@@ -28,7 +28,8 @@ I am currently an undergraduate student at *Huazhong University of Science and T
 
 <img class="jpg" src="/images/hust-logo.jpg" width="50pt"> Huazhong University of Science and Technology
 <br>
-- *Sept. 2023 - Jun. 2027*, Bachelor of Engineering in Computer Science and Technology, GPA: 4.71/5.00 (university scale) \| **4.0**/4.0 (WES U.S. equivalency), Rank: **1**/30.
+- *Sept. 2023 - Jun. 2027*, Bachelor of Engineering in Computer Science and Technology
+- GPA: 4.71/5.00 (university scale) \| **4.0**/4.0 (WES U.S. equivalency), Rank: **1**/30.
 
 <img class="jpg" src="/images/nus-logo.jpg" width="50pt"> National University of Singapore
 <br>
